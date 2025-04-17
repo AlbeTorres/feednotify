@@ -1,0 +1,27 @@
+[
+    {
+      "id": "techcrunch",
+      "type": "rss",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "verge",
+      "type": "rss",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "youtube_openai",
+      "type": "youtube",
+      "name": "OpenAI",
+      "channelId": "UCXZCJLdBC09xxGZ6gcdrc6A"
+    },
+    {
+      "id": "twitter_openai",
+      "type": "twitter",
+      "name": "OpenAI",
+      "handle": "@OpenAI"
+    }
+  ]
+  

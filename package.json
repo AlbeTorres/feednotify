@@ -1,0 +1,24 @@
+{
+  "name": "feednotify",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch src/**/*.ts --exec \"npx ts-node\" src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/node": "^22.14.1",
+    "axios": "^1.8.4",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.10.1",
+    "nodemon": "^3.1.9",
+    "rss-parser": "^3.13.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
