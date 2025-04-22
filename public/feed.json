@@ -12,6 +12,12 @@
       "url": "https://www.theverge.com/rss/index.xml"
     },
     {
+      "id": "Playstation_Blog",
+      "type": "rss",
+      "name": "Playstation Blog",
+      "url": "https://blog.playstation.com/rss"
+    },
+    {
       "id": "youtube_openai",
       "type": "youtube",
       "name": "OpenAI",
