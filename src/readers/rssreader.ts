@@ -1,5 +1,5 @@
 import Parser from 'rss-parser';
-const { htmlToText } = require('html-to-text');
+const { htmlToText } = require('html-to-text'); // eslint-disable-line @typescript-eslint/no-require-imports
 
 type Feed = {
   id: string;
