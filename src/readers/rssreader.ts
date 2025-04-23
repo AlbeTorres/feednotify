@@ -1,4 +1,5 @@
 import Parser from 'rss-parser';
+const { htmlToText } = require('html-to-text');
 
 type Feed = {
   id: string;
@@ -7,56 +8,72 @@ type Feed = {
   url: string;
 };
 
+type Post = {
+  title: string;
+  link: string;
+  pubDate: string;
+  content: string;
+  guid: string;
+  isoDate: string;
+  categories: string[];
+  creator: string;
+};
+
 const parser = new Parser();
 
-export async function readRssFeeds(feeds: Feed[], pubDateThreshold: Date, itemLinkThreshold: string) {
-  const rssFeeds = feeds.filter(feed => feed.type === 'rss');
+export async function readRssFeeds(feeds: Feed[], pubDateThreshold: Date) {
+  const rssFeeds = feeds.filter((feed) => feed.type === 'rss');
 
-  for (const feed of rssFeeds) {
-    try {
-      const parsed = await parser.parseURL(feed.url);
-      console.log(`📥 Feed: ${feed.name}`);
-      console.log(parsed.items[0])
+  return await Promise.all(
+    rssFeeds.map(async (feed) => {
+      try {
+        const parsed = await parser.parseURL(feed.url);
 
-      //Check if the feed has items 
-      if (!parsed.items || parsed.items.length === 0) {
-        console.log('  No hay artículos en este feed.');
-        return;
+        const filteredItems = filterItems(
+          parsed.items as Post[],
+          pubDateThreshold
+        );
+
+        return {
+          id: feed.id,
+          name: feed.name,
+          url: feed.url,
+          posts: filteredItems,
+          lastRead: new Date(0), // Initialize with a date far in the past
+        };
+      } catch (error) {
+        console.error(`Error fetching ${feed.name}:`, error);
       }
-
-      const filteredItems = filterItems(parsed.items, pubDateThreshold, itemLinkThreshold);
-
-      filteredItems.slice(0, 3).forEach((item, i) => {
-        console.log(`  ${i + 1}. ${item.title}`); 
-        console.log(`     ${item.link}`);
-      });
-
-      if (filteredItems.length === 0) {
-        console.log('  No hay artículos nuevos desde la última vez que se leyó este feed.');
-      } else {
-        console.log(`  ${filteredItems.length} artículos nuevos desde la última vez que se leyó este feed.`);
-      }
-    } catch (error) {
-      console.error(`❌ Error leyendo feed "${feed.name}":`, error);
-    }
-  }
+    })
+  );
 }
 
-function filterItems(parsedItems: any[], pubDateThreshold: Date, itemLinkThreshold: string):any[] {
+function filterItems(parsedItems: Post[], pubDateThreshold: Date): Post[] {
+  //Check if the feed has items
+  if (!parsedItems || parsedItems.length === 0) {
+    return [];
+  }
 
-   //Check if the feed has a pubDate property
-   //TODO: if the feed has no pubDate property, filter by the link property, take the items before the item with the same link property as itemLinkThreshold
+  // Check if the feed has a pubDate property
+  // TODO: if the feed has no pubDate property, filter by the link property, take the items before the item with the same link property as itemLinkThreshold
 
-  parsedItems.filter(item => {
-   
-    if (!item.pubDate){
-    
-
-    }else {
-      const itemDate = new Date(item.pubDate);
-      return !isNaN(itemDate.getTime()) && itemDate > pubDateThreshold;
+  parsedItems.filter((item) => {
+    const itemDate = new Date(item.pubDate);
+    if (!isNaN(itemDate.getTime()) && itemDate > pubDateThreshold) {
+      return {
+        title: item.title,
+        link: item.link,
+        content: htmlToText(item.content, {
+          wordwrap: 130,
+        }),
+        pubDate: item.pubDate,
+        guid: item.guid,
+        isoDate: item.isoDate,
+        categories: item.categories,
+        creator: item.creator,
+      };
     }
   });
 
-  return []
+  return parsedItems;
 }
