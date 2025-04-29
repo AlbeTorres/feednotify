@@ -1,3 +1,4 @@
+import { getYoutubeVideoResume } from './AIHelper/youtubeSumariser';
 import { readRssFeeds } from './readers/rssreader';
 import { readYoutubeFeeds } from './readers/youtubeReader';
 
@@ -55,3 +56,5 @@ readRssFeeds(feeds, yesterday).then((rssfeds) => {
 readYoutubeFeeds(feeds, yesterday).then((youfeds) => {
   console.log(youfeds);
 });
+
+getYoutubeVideoResume('https://www.youtube.com/watch?v=IZKLmp2oqTY');
