@@ -1,29 +1,17 @@
 import axios from 'axios';
 import { google } from 'googleapis';
+import { SourceFeedItem, YoutubeVideo } from '../Interfaces';
 require('dotenv').config(); // eslint-disable-line @typescript-eslint/no-require-imports
-
-type Feed = {
-  id: string;
-  type: string;
-  name: string;
-  url: string;
-};
-
-type Video = {
-  title: string;
-  link: string;
-  publishedAt: string;
-  description: string;
-  channelId: string;
-  channelTitle: string;
-};
 
 const youtube = google.youtube({
   version: 'v3',
   auth: process.env.YOUTUBE_API_KEY, // <== Esta línea es importante
 });
 
-export async function readYoutubeFeeds(feeds: Feed[], pubDateThreshold: Date) {
+export async function readYoutubeFeeds(
+  feeds: SourceFeedItem[],
+  pubDateThreshold: Date
+) {
   const youtubeFeeds = feeds.filter((feed) => feed.type === 'youtube');
 
   return await Promise.all(
@@ -53,7 +41,7 @@ export async function readYoutubeFeeds(feeds: Feed[], pubDateThreshold: Date) {
           channelId: item.snippet?.channelId || '',
           channelTitle: item.snippet?.channelTitle || '',
           thumbnail: item.snippet?.thumbnails?.medium?.url || '',
-        })) as Video[];
+        })) as YoutubeVideo[];
 
         return {
           id: feed.id,

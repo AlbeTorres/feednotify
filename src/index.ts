@@ -1,4 +1,4 @@
-import { getYoutubeVideoResume } from './AIHelper/youtubeSumariser';
+// import { getYoutubeVideoResume } from './AIHelper/youtubeSumariser';
 import { readRssFeeds } from './readers/rssreader';
 import { readYoutubeFeeds } from './readers/youtubeReader';
 
@@ -6,8 +6,16 @@ const feeds = [
   {
     id: 'Playstation_Blog',
     type: 'rss',
+    category: 'Games',
     name: 'Playstation Blog',
     url: 'https://blog.playstation.com/feed',
+  },
+  {
+    id: 'XBOX_Blog',
+    type: 'rss',
+    name: 'XBOX Blog',
+    category: 'Games',
+    url: 'https://news.xbox.com/en-us/feed/',
   },
   {
     id: 'techcrunch',
@@ -22,22 +30,30 @@ const feeds = [
     url: 'https://www.theverge.com/rss/index.xml',
   },
   {
-    id: 'linus_tech_tips',
-    type: 'youtube',
-    name: 'Linus Tech Tips',
-    url: 'https://www.youtube.com/@linustechtips',
-  },
-  {
     id: 'cnet',
     type: 'rss',
     name: 'CNET',
     url: 'https://www.cnet.com/rss/all/',
   },
   {
-    id: 'ign',
+    id: 'ign_game',
     type: 'rss',
-    name: 'IGN',
-    url: 'https://www.ign.com/rss/all.ign',
+    name: 'IGN Games',
+    category: 'Games',
+    url: 'https://feeds.feedburner.com/ign/games-all',
+  },
+  {
+    id: 'The Gamer',
+    type: 'rss',
+    name: 'The Gamer originals',
+    category: 'Games',
+    url: 'https://www.thegamer.com/feed/category/tg-originals/',
+  },
+  {
+    id: 'ign_movies',
+    type: 'rss',
+    name: 'IGN Movies',
+    url: 'https://feeds.feedburner.com/ign/movies-articles',
   },
   {
     id: 'gizmodo',
@@ -45,16 +61,36 @@ const feeds = [
     name: 'Gizmodo',
     url: 'https://gizmodo.com/rss',
   },
+  {
+    id: 'Harvard_Business_Review',
+    type: 'rss',
+    name: 'Harvard Business Review',
+    category: 'Business',
+    url: 'http://feeds.hbr.org/harvardbusiness',
+  },
+  {
+    id: 'linus_tech_tips',
+    type: 'youtube',
+    name: 'Linus Tech Tips',
+    url: 'https://www.youtube.com/@linustechtips',
+  },
 ];
 
-const yesterday = new Date();
-yesterday.setDate(yesterday.getDate() - 1);
+export async function Main() {
+  const lastWeek = new Date();
+  lastWeek.setDate(lastWeek.getDate() - 7);
 
-readRssFeeds(feeds, yesterday).then((rssfeds) => {
-  console.log(rssfeds);
-});
-readYoutubeFeeds(feeds, yesterday).then((youfeds) => {
-  console.log(youfeds);
-});
+  const rssFeed = await readRssFeeds(feeds, lastWeek);
+  const youtubeFeed = await readYoutubeFeeds(feeds, lastWeek);
 
-getYoutubeVideoResume('https://www.youtube.com/watch?v=IZKLmp2oqTY');
+  const feed = {
+    rssFeed,
+    youtubeFeed,
+  };
+
+  console.log(feed);
+
+  // getYoutubeVideoResume('https://www.youtube.com/watch?v=IZKLmp2oqTY');
+}
+
+Main();

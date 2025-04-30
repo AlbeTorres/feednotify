@@ -1,27 +1,13 @@
 import Parser from 'rss-parser';
+import { Post, SourceFeedItem } from '../Interfaces';
 const { htmlToText } = require('html-to-text'); // eslint-disable-line @typescript-eslint/no-require-imports
-
-type Feed = {
-  id: string;
-  type: string;
-  name: string;
-  url: string;
-};
-
-type Post = {
-  title: string;
-  link: string;
-  pubDate: string;
-  content: string;
-  guid: string;
-  isoDate: string;
-  categories: string[];
-  creator: string;
-};
 
 const parser = new Parser();
 
-export async function readRssFeeds(feeds: Feed[], pubDateThreshold: Date) {
+export async function readRssFeeds(
+  feeds: SourceFeedItem[],
+  pubDateThreshold: Date
+) {
   const rssFeeds = feeds.filter((feed) => feed.type === 'rss');
 
   return await Promise.all(
