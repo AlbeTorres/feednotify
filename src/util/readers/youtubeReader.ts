@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { google } from 'googleapis';
-import { SourceFeedItem, YoutubeVideo } from '../Interfaces';
+import { SourceFeedItem, YoutubeVideo } from '../../Interfaces';
+
 require('dotenv').config(); // eslint-disable-line @typescript-eslint/no-require-imports
 
 const youtube = google.youtube({
@@ -57,45 +58,6 @@ export async function readYoutubeFeeds(
     })
   );
 }
-
-// // Convierte un enlace como https://www.youtube.com/@nombre a channelId
-// export async function getChannelIdFromHandle(url: string) {
-//   try {
-//     const { data } = await axios.get(url);
-//     const $ = cheerio.load(data);
-//     const scripts = $('script');
-//     console.log($);
-
-//     let channelId = null;
-
-//     scripts.each((_, el) => {
-//       const content = $(el).html();
-//       const match = content?.match(/"channelId":"(UC[\w-]+)"/);
-//       if (match) {
-//         channelId = match[1];
-//       }
-//     });
-
-//     if (!channelId) {
-//       throw new Error('No se pudo encontrar el channelId');
-//     }
-
-//     return channelId;
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       console.error('Error al obtener el ID del canal:', error.message);
-//     } else {
-//       console.error('Error al obtener el ID del canal:', error);
-//     }
-//   }
-// }
-
-// function extractChannelId(url: string): string | null {
-//   const match = url.match(
-//     /(?:youtube\.com\/channel\/|youtube\.com\/user\/|youtube\.com\/c\/|youtube\.com\/@)([^/?]+)/
-//   );
-//   return match ? match[1] : null;
-// }
 
 /**
  * Extrae el channelId desde el código fuente HTML buscando "browse_id"
