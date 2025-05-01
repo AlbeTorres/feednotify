@@ -32,8 +32,6 @@ export async function readYoutubeFeeds(
           publishedAfter: pubDateThreshold.toISOString(),
         });
 
-        console.log(response.data.items);
-
         const videos = response.data.items?.map((item) => ({
           title: item.snippet?.title || '',
           link: `https://www.youtube.com/watch?v=${item.id?.videoId}`,

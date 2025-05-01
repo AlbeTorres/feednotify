@@ -44,23 +44,31 @@ function filterItems(parsedItems: Post[], pubDateThreshold: Date): Post[] {
   // Check if the feed has a pubDate property
   // TODO: if the feed has no pubDate property, filter by the link property, take the items before the item with the same link property as itemLinkThreshold
 
-  parsedItems.filter((item) => {
-    const itemDate = new Date(item.pubDate);
-    if (!isNaN(itemDate.getTime()) && itemDate > pubDateThreshold) {
-      return {
-        title: item.title,
-        link: item.link,
-        content: htmlToText(item.content, {
-          wordwrap: 130,
-        }),
-        pubDate: item.pubDate,
-        guid: item.guid,
-        isoDate: item.isoDate,
-        categories: item.categories,
-        creator: item.creator,
-      };
-    }
-  });
+  return parsedItems
+    .filter((item) => {
+      const itemDate = new Date(item.pubDate);
+      return !isNaN(itemDate.getTime()) && itemDate > pubDateThreshold;
+    })
+    .map((item) => ({
+      title: item.title,
+      link: item.link,
+      content: getContent(item),
+      pubDate: item.pubDate,
+      guid: item.guid,
+      isoDate: item.isoDate,
+      categories: item.categories,
+      creator: item.creator,
+    }));
+}
 
-  return parsedItems;
+function getContent(item: Post): string {
+  if (item['content:encodedSnippet']) {
+    return htmlToText(item['content:encodedSnippet']);
+  } else if (item.contentSnippet) {
+    return item.contentSnippet;
+  } else if (item.content) {
+    return item.content;
+  } else {
+    return item.summary || '';
+  }
 }
