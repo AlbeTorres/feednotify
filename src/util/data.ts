@@ -1,3 +1,7 @@
+export const email = 'albertocorreoficial@gmail.com';
+
+export const name = 'Alberto';
+
 export const feeds = [
   {
     id: 'Playstation_Blog',

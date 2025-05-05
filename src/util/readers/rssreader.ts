@@ -11,7 +11,7 @@ export async function readRssFeeds(
 ) {
   const rssFeeds = feeds.filter((feed) => feed.type === 'rss');
 
-  return await Promise.all(
+  const feedResponse = await Promise.all(
     rssFeeds.map(async (feed) => {
       try {
         const parsed = await parser.parseURL(feed.url);
@@ -33,6 +33,8 @@ export async function readRssFeeds(
       }
     })
   );
+
+  return feedResponse.filter((feed) => feed !== undefined);
 }
 
 function filterItems(parsedItems: Post[], pubDateThreshold: Date): Post[] {

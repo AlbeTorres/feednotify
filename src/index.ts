@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import newsletterRoutes from './routes/newsletter';
 import updatesRoutes from './routes/updates';
 
 // crear eL servidor
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/updates', updatesRoutes);
+app.use('/api/newsletter', newsletterRoutes);
 
 // puerto de la app
 const PORT = process.env.PORT || 4000;

@@ -15,7 +15,7 @@ export async function readYoutubeFeeds(
 ) {
   const youtubeFeeds = feeds.filter((feed) => feed.type === 'youtube');
 
-  return await Promise.all(
+  const feedResponse = await Promise.all(
     youtubeFeeds.map(async (feed) => {
       try {
         const channelId = await getChannelIdFromHandle(feed.url);
@@ -55,6 +55,8 @@ export async function readYoutubeFeeds(
       }
     })
   );
+
+  return feedResponse.filter((feed) => feed !== null);
 }
 
 /**
