@@ -5,4 +5,5 @@ export interface YoutubeVideo {
   description: string;
   channelId: string;
   channelTitle: string;
+  thumbnail: string;
 }

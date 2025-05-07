@@ -1,7 +1,7 @@
 import { render } from '@react-email/render';
 import { RssFeed, YoutubeFeed } from '../Interfaces';
 import { createMailTransporter } from './createMailTransporter';
-import { NewsletterTemplate } from './NewsLetterTemplate';
+import NewsletterTemplate from './NewsLetterTemplate';
 
 export const sendNewsLetterMail = async (
   email: string,
@@ -10,7 +10,7 @@ export const sendNewsLetterMail = async (
 ) => {
   const transporter = createMailTransporter();
 
-  const html = await render(<NewsletterTemplate name={name} feeds={feed} />);
+  const html = await render(<NewsletterTemplate name={name} data={feed} />);
 
   const mailOptions = {
     from: '"Albe de financeApp", <financeApp-pi.vercel.app>',
