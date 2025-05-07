@@ -17,12 +17,13 @@ export const YoutubeVideoCard = ({
       style={{
         backgroundColor: 'white',
         borderRadius: '8px',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        border: '1px solid #ddd',
+        // boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
       }}
     >
       <tr>
-        <td style={{ position: 'relative' }}>
-          <div style={{ position: 'relative', height: '160px', width: '100%' }}>
+        <td>
+          <div style={{ height: '160px', width: '100%' }}>
             <a href={link} style={{ textDecoration: 'none' }}>
               <img
                 src={thumbnail || 'https://via.placeholder.com/300x160'}
@@ -36,32 +37,6 @@ export const YoutubeVideoCard = ({
                   borderTopRightRadius: '8px',
                 }}
               />
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(255,255,255,0.8)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <div
-                  style={{
-                    width: '0',
-                    height: '0',
-                    borderTop: '8px solid transparent',
-                    borderBottom: '8px solid transparent',
-                    borderLeft: '12px solid #9333ea',
-                    marginLeft: '4px',
-                  }}
-                ></div>
-              </div>
             </a>
           </div>
         </td>
@@ -75,8 +50,14 @@ export const YoutubeVideoCard = ({
               fontWeight: '500',
               color: '#9333ea',
               textDecoration: 'none',
-              display: 'block',
               marginBottom: '4px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              lineHeight: '1.4', // Ajusta según gusto
+              height: '2.8em', // 1.4 * 2 líneas
             }}
           >
             {title}
@@ -96,6 +77,8 @@ export const YoutubeVideoCard = ({
               display: '-webkit-box',
               WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
+              lineHeight: '1.4', // Ajusta según gusto
+              height: '2.8em', // 1.4 * 2 líneas
             }}
           >
             {description}

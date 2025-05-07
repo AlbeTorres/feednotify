@@ -88,7 +88,12 @@ export function NewsletterTemplate({ name, data }: Props) {
                     </tr>
 
                     {feed.posts.map((post) => (
-                      <Article {...post} href={post.link} date={post.pubDate} />
+                      <Article
+                        key={post.guid}
+                        {...post}
+                        href={post.link}
+                        date={post.pubDate}
+                      />
                     ))}
                   </table>
                 ))}
@@ -157,7 +162,10 @@ export function NewsletterTemplate({ name, data }: Props) {
                             .map((row, rowIndex) => (
                               <tr key={`row-${rowIndex}`}>
                                 {row.map((video) => (
-                                  <YoutubeVideoCard {...video} />
+                                  <YoutubeVideoCard
+                                    key={video.channelId}
+                                    {...video}
+                                  />
                                 ))}
                                 {row.length === 1 && (
                                   <td

@@ -41,7 +41,21 @@ export const Article = ({
           <span> • {categories.join(', ')}</span>
         )}
       </p>
-      <p style={{ margin: '0', color: '#444444' }}>{content}</p>
+      <p
+        style={{
+          margin: '0',
+          color: '#444444',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          lineHeight: '1.4', // Ajusta según gusto
+          height: '2.8em', // 1.4 * 2 líneas
+        }}
+      >
+        {content}
+      </p>
     </td>
   </tr>
 );
