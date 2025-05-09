@@ -1,5 +1,5 @@
-export { Post } from './Post';
-export { RssFeed } from './RssFeed';
-export { SourceFeedItem } from './SourceFeedItem';
-export { YoutubeFeed } from './YoutubeFeed';
-export { YoutubeVideo } from './YoutubeVideo';
+export { Post } from './post.interface';
+export { RssFeed } from './rssFeed.interface';
+export { SourceFeedItem } from './sourceFeedItem.interface';
+export { YoutubeFeed } from './youtubeFeed.interface';
+export { YoutubeVideo } from './youtubeVideo.interface';

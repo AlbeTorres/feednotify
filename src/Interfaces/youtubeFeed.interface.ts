@@ -1,4 +1,4 @@
-import { YoutubeVideo } from './YoutubeVideo';
+import { YoutubeVideo } from './youtubeVideo.interface';
 
 export interface YoutubeFeed {
   id: string;

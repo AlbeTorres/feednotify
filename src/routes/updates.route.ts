@@ -1,5 +1,8 @@
 import express from 'express';
-import { getLastWeekUpdates, getUpdatesSince } from '../controllers/update';
+import {
+  getLastWeekUpdates,
+  getUpdatesSince,
+} from '../controllers/update.controller';
 
 const router = express.Router();
 
