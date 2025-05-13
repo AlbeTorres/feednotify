@@ -1,18 +1,18 @@
 import { Prisma } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
 import createError from 'http-errors';
 import jwt, { JsonWebTokenError, SignOptions } from 'jsonwebtoken';
 import * as z from 'zod';
-import { JWT_EXPIRES_IN, JWT_SECRET } from '../config/jwt.config.js';
-import { JwtPayload } from '../Interfaces/jwtPayload.interface.js';
-import prisma from '../lib/prisma.js';
-import { LoginDto } from '../validators/auth.schema.js';
+import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/jwt.config.js';
+import prisma from '../../config/prisma.js';
+import { JwtPayload } from '../../Interfaces/jwtPayload.interface.js';
+import { LoginSchema, LoginSchemaType } from '../../validators/auth.schema.js';
 
 export async function Login({
   email,
   password,
-}: z.infer<typeof LoginDto>): Promise<{ token: string; user: JwtPayload }> {
-  const validatedFields = LoginDto.safeParse({ email, password });
+}: LoginSchemaType): Promise<{ token: string; user: JwtPayload }> {
+  const validatedFields = LoginSchema.safeParse({ email, password });
 
   if (!validatedFields.success) {
     throw new createError.BadRequest('Datos de entrada inválidos'); // Error genérico por seguridad
@@ -27,7 +27,7 @@ export async function Login({
       ); // Error genérico por seguridad
     }
 
-    const valid = await bcrypt.compare(password, user.password);
+    const valid = await bcryptjs.compare(password, user.password);
     if (!valid) throw new createError.Unauthorized('Credenciales no válidas.');
 
     const signOptions: SignOptions = {
