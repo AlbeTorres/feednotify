@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import errorHandler from './middleware/errorHandler.middleware';
+import authRoutes from './routes/auth.route';
 import newsletterRoutes from './routes/newsletter.route';
 import updatesRoutes from './routes/updates.route';
 
@@ -16,6 +17,7 @@ app.use(express.json());
 //rutas
 app.use('/api/updates', updatesRoutes);
 app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/auth', authRoutes);
 
 app.use(errorHandler);
 

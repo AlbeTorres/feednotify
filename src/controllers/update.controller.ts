@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { getUpdatesByDate } from '../services/getUpdates.service';
+
+import { getUpdatesByDate } from '../services/update/getUpdates.service';
 import { feeds } from '../util/data';
 
 export async function getUpdatesSince(req: Request, res: Response) {

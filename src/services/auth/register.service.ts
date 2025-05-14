@@ -10,7 +10,7 @@ import {
 } from '../../validators/auth.schema.js';
 import { generateVerificationToken } from '../token/generateVerificationToken.service.js';
 
-export async function Register({
+export async function registerService({
   name,
   password,
   email,

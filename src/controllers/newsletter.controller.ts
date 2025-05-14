@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { sendNewsLetterMail } from '../email/sendFeedNewsletter';
-import { getUpdatesByDate } from '../services/getUpdates.service';
+
+import { getUpdatesByDate } from '../services/update/getUpdates.service';
 import { email, feeds, name } from '../util/data';
 
 export async function sendNewsletter(req: Request, res: Response) {
