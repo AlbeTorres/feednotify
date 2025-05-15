@@ -2,17 +2,17 @@ import { Prisma } from '@prisma/client';
 import bcryptjs from 'bcryptjs';
 import createError from 'http-errors';
 import jwt, { JsonWebTokenError, SignOptions } from 'jsonwebtoken';
-import * as z from 'zod';
-import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/jwt.config.js';
-import prisma from '../../config/prisma.js';
-import { sendTwoFactorTokenMail } from '../../email/sendTwoFactorTokenMail.js';
-import { sendVerificationMail } from '../../email/sendVerificationMail.js';
-import { JwtPayload } from '../../Interfaces/jwtPayload.interface.js';
-import { LoginSchema, LoginSchemaType } from '../../validators/auth.schema.js';
-import { generateTwoFactorToken } from '../token/generateTwoFactorToken.service.js';
-import { generateVerificationToken } from '../token/generateVerificationToken.service.js';
-import { getTwofactorConfirmationByUserId } from '../token/getTwofactorConfirmation.service.js';
-import { getTwoFactorTokenByEmail } from '../token/getTwoFactorTokenByEmail.service.js';
+
+import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/jwt.config';
+import prisma from '../../config/prisma';
+import { sendTwoFactorTokenMail } from '../../email/sendTwoFactorTokenMail';
+import { sendVerificationMail } from '../../email/sendVerificationMail';
+import { JwtPayload } from '../../Interfaces/jwtPayload.interface';
+import { LoginSchemaType } from '../../validators/auth.schema';
+import { generateTwoFactorToken } from '../token/generateTwoFactorToken.service';
+import { generateVerificationToken } from '../token/generateVerificationToken.service';
+import { getTwofactorConfirmationByUserId } from '../token/getTwofactorConfirmation.service';
+import { getTwoFactorTokenByEmail } from '../token/getTwoFactorTokenByEmail.service';
 
 export async function loginService({
   email,
@@ -21,15 +21,10 @@ export async function loginService({
 }: LoginSchemaType): Promise<{
   token: string;
   user: JwtPayload;
+  success: boolean;
   state?: string;
   msg?: string;
 }> {
-  const validatedFields = LoginSchema.safeParse({ email, password, code });
-
-  if (!validatedFields.success) {
-    throw new createError.BadRequest('Datos de entrada inválidos'); // Error genérico por seguridad
-  }
-
   try {
     const user = await prisma.user.findUnique({ where: { email } });
 
@@ -55,6 +50,7 @@ export async function loginService({
           email: '',
           role: '',
         },
+        success: false,
         state: 'unverificated_email',
         msg: 'Confirmation email sent!',
       };
@@ -67,11 +63,12 @@ export async function loginService({
         const twoFactorToken = await getTwoFactorTokenByEmail(user.email);
 
         if (!twoFactorToken || twoFactorToken.token !== code)
-          throw new createError.Unauthorized('Invalid token!');
+          throw new createError.Unauthorized('Invalid 2fa token!');
 
         const hasExpired = new Date(twoFactorToken.expires) < new Date();
 
-        if (hasExpired) throw new createError.Unauthorized('Invalid token!');
+        if (hasExpired)
+          throw new createError.Unauthorized('Invalid 2fa token!: expired');
 
         const existingConfirmation = await getTwofactorConfirmationByUserId(
           user.id
@@ -105,6 +102,7 @@ export async function loginService({
             email: '',
             role: '',
           },
+          success: false,
           state: 'two_factor_token_send',
           msg: '2FA token email sent!',
         };
@@ -130,16 +128,18 @@ export async function loginService({
     // Firmar el token
     const token = jwt.sign(payload, JWT_SECRET, signOptions);
 
-    return { token, user: payload };
+    return {
+      token,
+      user: payload,
+      success: true,
+      state: 'success',
+      msg: 'Login successful!',
+    };
   } catch (err: unknown) {
     // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {
       // Ya viene con status y mensaje adecuados
       throw err;
-    }
-    if (err instanceof z.ZodError) {
-      // Nunca debería llegar aquí porque lo validamos antes, pero…
-      throw new createError.BadRequest('Error de validación interno');
     }
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       // P2025 sería “registro no encontrado”, aunque en login ya lo cubrimos
