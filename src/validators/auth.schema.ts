@@ -24,6 +24,19 @@ export const EmailVerificationSchema = z
   })
   .strict(); // Para evitar que se envíen campos no válidos
 
+export const ResetPasswordEmailSenderSchema = z.object({
+  email: z.string().email(),
+});
+
+export const ResetPasswordSchema = z.object({
+  password: z.string().min(8, { message: 'Minimun 8 characters required' }),
+  token: z.string(),
+});
+
+export type ResetPasswordEmailSenderSchemaType = z.infer<
+  typeof ResetPasswordEmailSenderSchema
+>;
+export type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>;
 export type EmailVerificationSchemaType = z.infer<
   typeof EmailVerificationSchema
 >;

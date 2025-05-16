@@ -132,7 +132,6 @@ export async function loginService({
       token,
       user: payload,
       success: true,
-      state: 'success',
       msg: 'Login successful!',
     };
   } catch (err: unknown) {

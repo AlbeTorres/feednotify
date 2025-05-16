@@ -16,7 +16,11 @@ export async function emailVerification(req: Request, res: Response) {
     const response = await emailVerificationService({ token });
 
     if (response.success) {
-      res.status(200).json(response);
+      res.status(200).json({
+        message: 'Email verificado con éxito',
+      });
+    } else {
+      throw new createError.InternalServerError('Error al verificar el email');
     }
   } catch (err: unknown) {
     // —— Errores conocidos ——

@@ -1,14 +1,16 @@
 import { Prisma } from '@prisma/client';
+import bcryptjs from 'bcryptjs';
 import createError from 'http-errors';
 import prisma from '../../config/prisma';
-import { EmailVerificationSchemaType } from '../../validators/auth.schema';
-import { getVerificationTokenByToken } from '../token/getVerificationTokenByToken.service';
+import { ResetPasswordSchemaType } from '../../validators/auth.schema';
+import { getResetTokenByToken } from '../token/getResetTokenByToken.service';
 
-export async function emailVerificationService({
+export async function resetPasswordService({
+  password,
   token,
-}: EmailVerificationSchemaType) {
+}: ResetPasswordSchemaType) {
   try {
-    const isValid = await getVerificationTokenByToken(token);
+    const isValid = await getResetTokenByToken(token);
     if (!isValid) throw new createError.Unauthorized('Invalid token');
 
     const hasExpired = new Date(isValid.expires) < new Date();
@@ -21,11 +23,11 @@ export async function emailVerificationService({
         email: isValid.email,
       },
       data: {
-        emailVerified: new Date(),
+        password: bcryptjs.hashSync(password),
       },
     });
 
-    await prisma.verificationToken.delete({
+    await prisma.passwordResetToken.delete({
       where: {
         id: isValid.id,
       },
@@ -33,7 +35,7 @@ export async function emailVerificationService({
 
     return {
       success: true,
-      msg: 'Email verified',
+      msg: 'Password changed',
     };
   } catch (err: unknown) {
     // —— Errores conocidos ——
