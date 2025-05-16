@@ -1,30 +1,29 @@
 import { Request, Response } from 'express';
 import createError from 'http-errors';
 import * as z from 'zod';
-import { registerService } from '../../services/auth/register.service';
-import { RegisterSchema } from '../../validators/auth.schema';
+import { googleOAuthService } from '../../services/auth/googleOAuth.service';
+import { GoogleOAuthSchema } from '../../validators/auth.schema';
 
-export async function register(req: Request, res: Response) {
-  const { name, email, password, role } = req.body;
-  const validatedFields = RegisterSchema.safeParse({
-    email,
-    password,
-    name,
-    role,
+export async function googleOAuth(req: Request, res: Response) {
+  const { googleIdToken, accessToken } = req.body;
+
+  const validatedFields = GoogleOAuthSchema.safeParse({
+    googleIdToken,
+    accessToken,
   });
 
   if (!validatedFields.success) {
-    throw new createError.BadRequest('Datos de entrada inválidos'); // Error genérico por seguridad
+    throw new createError.BadRequest('Invalid input data');
   }
 
   try {
-    const response = await registerService({ name, email, password, role });
+    const response = await googleOAuthService({ googleIdToken, accessToken });
 
-    if (response.success) {
-      res.status(200).json({ message: response.msg });
+    if (response) {
+      res.status(200).json(response);
     } else {
       throw new createError.InternalServerError(
-        'Error al registrar el usuario'
+        'Error al autenticar el usuario'
       );
     }
   } catch (err: unknown) {
@@ -33,14 +32,14 @@ export async function register(req: Request, res: Response) {
       // Ya viene con status y mensaje adecuados
       throw err;
     }
+
     if (err instanceof z.ZodError) {
       // Nunca debería llegar aquí porque lo validamos antes, pero…
       throw new createError.BadRequest('Error de validación interno');
     }
-
     // —— Falla desconocida ——
     // Log interno útil para debugging (evitar mostrarlo al usuario)
-    console.error('[Register Error]', err);
+    console.error('[Google OAuth Error]', err);
     throw new createError.InternalServerError(
       'Error inesperado al iniciar sesión'
     );

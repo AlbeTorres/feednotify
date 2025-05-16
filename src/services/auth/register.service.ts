@@ -47,7 +47,12 @@ export async function registerService({
       user!.name || ''
     );
 
-    return { msg: 'Usuario creado', user, status: 'Confirmation email sent' };
+    return {
+      success: true,
+      msg: 'Usuario creado',
+      user,
+      status: 'Confirmation email sent',
+    };
   } catch (err: unknown) {
     // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {

@@ -33,6 +33,12 @@ export const ResetPasswordSchema = z.object({
   token: z.string(),
 });
 
+export const GoogleOAuthSchema = z.object({
+  googleIdToken: z.string(),
+  accessToken: z.string().optional(),
+});
+
+export type GoogleOAuthSchemaType = z.infer<typeof GoogleOAuthSchema>;
 export type ResetPasswordEmailSenderSchemaType = z.infer<
   typeof ResetPasswordEmailSenderSchema
 >;
