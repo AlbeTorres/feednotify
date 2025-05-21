@@ -4,7 +4,7 @@ import createError from 'http-errors';
 import prisma from '../../config/prisma';
 import { GenerateApiKeySchemaType } from '../../validators/apiKey.schema';
 
-export async function generateApiKey({
+export async function generateApiKeyService({
   client_name,
   userId,
   scopes,
@@ -41,6 +41,7 @@ export async function generateApiKey({
     });
 
     return {
+      success: true,
       apiKey,
       client_name,
       userId,

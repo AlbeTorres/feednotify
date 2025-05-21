@@ -14,7 +14,7 @@ export const deleteApiKeySchema = z.object({
   apiKeyId: z.string().uuid(),
 });
 
-export const updateApiKeyStatusSchema = z.object({
+export const updateApiKeySchema = z.object({
   apiKeyId: z.string().uuid(),
   status: z.boolean(),
   scopes: z.array(z.enum(['write', 'read'])).optional(),
@@ -22,9 +22,7 @@ export const updateApiKeyStatusSchema = z.object({
 
 export type DeleteApiKeySchemaType = z.infer<typeof deleteApiKeySchema>;
 
-export type UpdateApiKeyStatusSchemaType = z.infer<
-  typeof updateApiKeyStatusSchema
->;
+export type UpdateApiKeySchemaType = z.infer<typeof updateApiKeySchema>;
 
 export type GetApiKeysByUserIdSchemaType = z.infer<
   typeof getApiKeysByUserIdSchema

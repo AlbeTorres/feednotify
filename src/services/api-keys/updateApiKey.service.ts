@@ -1,13 +1,13 @@
 import { Prisma } from '@prisma/client';
 import createError from 'http-errors';
 import prisma from '../../config/prisma';
-import { UpdateApiKeyStatusSchemaType } from '../../validators/apiKey.schema';
+import { UpdateApiKeySchemaType } from '../../validators/apiKey.schema';
 
-export async function updateApiKeyStatus({
+export async function updateApiKeyService({
   apiKeyId,
   scopes,
   status,
-}: UpdateApiKeyStatusSchemaType) {
+}: UpdateApiKeySchemaType) {
   try {
     // Aquí iría la lógica para actualizar el estado del API Key en la base de datos
     // Por ejemplo, usando Prisma:
@@ -21,7 +21,7 @@ export async function updateApiKeyStatus({
 
     const { hashed_key: _, ...rest } = updatedApiKey; // eslint-disable-line @typescript-eslint/no-unused-vars
 
-    return { rest }; // Excluimos el hashed_key por seguridad
+    return { success: true, rest }; // Excluimos el hashed_key por seguridad
   } catch (err) {
     // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {

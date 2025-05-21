@@ -4,7 +4,8 @@ import { JwtPayload } from '../../interfaces/jwtPayload.interface'; // Ajusta la
 declare global {
   namespace Express {
     export interface Request {
-      usuario?: JwtPayload; // Usa el nombre y tipo que definiste
+      user?: JwtPayload; // Usa el nombre y tipo que definiste
+      client_name?: string; // Añadido para la API Key
     }
   }
 }

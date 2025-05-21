@@ -3,7 +3,7 @@ import createError from 'http-errors';
 import prisma from '../../config/prisma';
 import { GetApiKeysByUserIdSchemaType } from '../../validators/apiKey.schema';
 
-export async function getApiKeysByUserId({
+export async function getApiKeysByUserIdService({
   userId,
 }: GetApiKeysByUserIdSchemaType) {
   try {
@@ -29,7 +29,7 @@ export async function getApiKeysByUserId({
       throw new createError.NotFound('User not found');
     }
 
-    return user;
+    return { success: true, user };
   } catch (err) {
     // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {

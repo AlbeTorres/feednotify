@@ -3,7 +3,9 @@ import createError from 'http-errors';
 import prisma from '../../config/prisma';
 import { DeleteApiKeySchemaType } from '../../validators/apiKey.schema';
 
-export async function deleteApiKey({ apiKeyId }: DeleteApiKeySchemaType) {
+export async function deleteApiKeyService({
+  apiKeyId,
+}: DeleteApiKeySchemaType) {
   try {
     // Aquí iría la lógica para eliminar el API Key en la base de datos
     // Por ejemplo, usando Prisma:
@@ -11,7 +13,7 @@ export async function deleteApiKey({ apiKeyId }: DeleteApiKeySchemaType) {
       where: { id: apiKeyId },
     });
 
-    return deletedApiKey;
+    return { success: true, deletedApiKey };
   } catch (err) {
     // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {
