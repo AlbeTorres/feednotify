@@ -1,8 +1,9 @@
-import { Prisma } from '@prisma/client';
 import createError from 'http-errors';
-import prisma from '../../config/prisma';
+import { emailVerificationRepository } from '../../repository/auth/emailVerification.repository';
+import { deleteVerificationTokenRepository } from '../../repository/token/deleteVerificationToken.repository';
+import { getVerificationTokenByToken } from '../../repository/token/getVerificationTokenByToken.repository';
+import { email } from '../../util/data';
 import { EmailVerificationSchemaType } from '../../validators/auth.schema';
-import { getVerificationTokenByToken } from '../token/getVerificationTokenByToken.service';
 
 export async function emailVerificationService({
   token,
@@ -16,20 +17,12 @@ export async function emailVerificationService({
     if (hasExpired)
       throw new createError.Unauthorized('Invalid token: Expired token');
 
-    await prisma.user.update({
-      where: {
-        email: isValid.email,
-      },
-      data: {
-        emailVerified: new Date(),
-      },
+    await emailVerificationRepository({
+      email,
+      data: { emailVerified: new Date() },
     });
 
-    await prisma.verificationToken.delete({
-      where: {
-        id: isValid.id,
-      },
-    });
+    await deleteVerificationTokenRepository(isValid.id);
 
     return {
       success: true,
@@ -41,10 +34,7 @@ export async function emailVerificationService({
       // Ya viene con status y mensaje adecuados
       throw err;
     }
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      // P2025 sería “registro no encontrado”, aunque en login ya lo cubrimos
-      throw new createError.InternalServerError('Error de base de datos');
-    }
+
     // —— Falla desconocida ——
     // Log interno útil para debugging (evitar mostrarlo al usuario)
     console.error('[Email verification Error]', err);

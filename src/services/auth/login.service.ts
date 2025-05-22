@@ -1,18 +1,20 @@
-import { Prisma } from '@prisma/client';
 import bcryptjs from 'bcryptjs';
 import createError from 'http-errors';
 import jwt, { JsonWebTokenError, SignOptions } from 'jsonwebtoken';
 
 import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/jwt.config';
-import prisma from '../../config/prisma';
 import { sendTwoFactorTokenMail } from '../../email/sendTwoFactorTokenMail';
 import { sendVerificationMail } from '../../email/sendVerificationMail';
 import { JwtPayload } from '../../Interfaces/jwtPayload.interface';
+
+import { getUserByEmailRepository } from '../../repository/auth/getUserByEmail.repository';
+import { deleteTwoFactorConfirmationTokenRepository } from '../../repository/token/deleteTwoFactorConfirmation.repository';
+import { generateTwoFactorConfirmation } from '../../repository/token/generateTwoFactorConfirmation.repository';
+import { getTwofactorConfirmationByUserId } from '../../repository/token/getTwofactorConfirmation.repository';
+import { getTwoFactorTokenByEmail } from '../../repository/token/getTwoFactorTokenByEmail.repository';
 import { LoginSchemaType } from '../../validators/auth.schema';
 import { generateTwoFactorToken } from '../token/generateTwoFactorToken.service';
 import { generateVerificationToken } from '../token/generateVerificationToken.service';
-import { getTwofactorConfirmationByUserId } from '../token/getTwofactorConfirmation.service';
-import { getTwoFactorTokenByEmail } from '../token/getTwoFactorTokenByEmail.service';
 
 export async function loginService({
   email,
@@ -26,7 +28,7 @@ export async function loginService({
   msg?: string;
 }> {
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await getUserByEmailRepository(email);
 
     if (!user || !user.email || !user.password) {
       throw new createError.Unauthorized(
@@ -75,18 +77,12 @@ export async function loginService({
         );
 
         if (existingConfirmation) {
-          await prisma.twoFactorConfirmation.delete({
-            where: {
-              id: existingConfirmation.id,
-            },
-          });
+          await deleteTwoFactorConfirmationTokenRepository(
+            existingConfirmation.id
+          );
         }
 
-        await prisma.twoFactorConfirmation.create({
-          data: {
-            userId: user.id,
-          },
-        });
+        await generateTwoFactorConfirmation(user.id);
       } else {
         const twoFactorToken = await generateTwoFactorToken(user.email);
         sendTwoFactorTokenMail(
@@ -140,10 +136,7 @@ export async function loginService({
       // Ya viene con status y mensaje adecuados
       throw err;
     }
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      // P2025 sería “registro no encontrado”, aunque en login ya lo cubrimos
-      throw new createError.InternalServerError('Error de base de datos');
-    }
+
     if (err instanceof JsonWebTokenError) {
       throw new createError.InternalServerError('Error al generar token');
     }

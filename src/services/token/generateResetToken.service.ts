@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import prisma from '../../config/prisma';
-import { getResetTokenByEmail } from './getResetTokenByEmail.service';
+import { getResetTokenByEmail } from '../../repository/token/getResetTokenByEmail.repository';
 
 export const generateResetToken = async (email: string) => {
   const token = uuidv4();

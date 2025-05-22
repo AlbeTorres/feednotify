@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import createError from 'http-errors';
 import * as z from 'zod';
-import { getApiKeysByUserIdService } from '../../services/api-keys/getApiKeysByUserId.service';
+import { getApiKeysByUserIdService } from '../../services/api-key/getApiKeysByUserId.service';
 import { getApiKeysByUserIdSchema } from '../../validators/apiKey.schema';
 
 export async function getApiKeysByUserId(req: Request, res: Response) {

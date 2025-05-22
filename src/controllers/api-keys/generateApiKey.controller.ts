@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import createError from 'http-errors';
 import * as z from 'zod';
-import { generateApiKeyService } from '../../services/api-keys/generatedApiKey.service';
+import { generateApiKeyService } from '../../services/api-key/generatedApiKey.service';
 import { generateApiKeySchema } from '../../validators/apiKey.schema';
 
 export async function generateApiKey(req: Request, res: Response) {

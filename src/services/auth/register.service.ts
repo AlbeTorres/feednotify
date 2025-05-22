@@ -1,8 +1,8 @@
-import { Prisma } from '@prisma/client';
 import bcryptjs from 'bcryptjs';
 import createError from 'http-errors';
-import prisma from '../../config/prisma';
 import { sendVerificationMail } from '../../email/sendVerificationMail';
+import { createUserRepository } from '../../repository/auth/createUser.repository';
+import { getUserByEmailRepository } from '../../repository/auth/getUserByEmail.repository';
 import { RegisterSchemaType } from '../../validators/auth.schema';
 import { generateVerificationToken } from '../token/generateVerificationToken.service';
 
@@ -13,26 +13,21 @@ export async function registerService({
 }: RegisterSchemaType) {
   try {
     // Verificar si el usuario ya existe
-    const existingUser = await prisma.user.findUnique({
-      where: { email: email.toLocaleLowerCase() },
-    });
+
+    const existingUser = await getUserByEmailRepository(
+      email.toLocaleLowerCase()
+    );
 
     if (existingUser) {
       throw new createError.Conflict('El usuario ya existe');
     }
 
     // Crear el usuario
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email: email.toLocaleLowerCase(),
-        password: bcryptjs.hashSync(password),
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
+
+    const user = await createUserRepository({
+      name,
+      email: email.toLocaleLowerCase(),
+      password: bcryptjs.hashSync(password),
     });
 
     if (!user || !user.email) {
@@ -49,7 +44,7 @@ export async function registerService({
 
     return {
       success: true,
-      msg: 'Usuario creado',
+      msg: 'User registered successfully',
       user,
       status: 'Confirmation email sent',
     };
@@ -58,10 +53,6 @@ export async function registerService({
     if (err instanceof createError.HttpError) {
       // Ya viene con status y mensaje adecuados
       throw err;
-    }
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      // P2025 sería “registro no encontrado”, aunque en login ya lo cubrimos
-      throw new createError.InternalServerError('Error de base de datos');
     }
     // —— Falla desconocida ——
     // Log interno útil para debugging (evitar mostrarlo al usuario)

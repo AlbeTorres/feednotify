@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import createError from 'http-errors';
 import * as z from 'zod';
-import { deleteApiKeyService } from '../../services/api-keys/deleteApiKey.service';
+import { deleteApiKeyService } from '../../services/api-key/deleteApiKey.service';
 import { deleteApiKeySchema } from '../../validators/apiKey.schema';
 
 export async function deleteApiKey(req: Request, res: Response) {

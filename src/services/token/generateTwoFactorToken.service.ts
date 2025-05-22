@@ -1,6 +1,6 @@
 import cryto from 'crypto';
 import prisma from '../../config/prisma';
-import { getTwoFactorTokenByEmail } from './getTwoFactorTokenByEmail.service';
+import { getTwoFactorTokenByEmail } from '../../repository/token/getTwoFactorTokenByEmail.repository';
 
 export const generateTwoFactorToken = async (email: string) => {
   const token = cryto.randomInt(100_000, 1_000_000).toString();

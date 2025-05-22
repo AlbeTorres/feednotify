@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import createError from 'http-errors';
 import * as z from 'zod';
-import { updateApiKeyService } from '../../services/api-keys/updateApiKey.service';
+import { updateApiKeyService } from '../../services/api-key/updateApiKey.service';
 import { updateApiKeySchema } from '../../validators/apiKey.schema';
 
 export async function updateApiKey(req: Request, res: Response) {
