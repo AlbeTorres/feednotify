@@ -10,8 +10,13 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx", // <-- Añade esta línea
-    "allowSyntheticDefaultImports": true // <-- Recomendado para React Email
+    "allowSyntheticDefaultImports": true, // <-- Recomendado para React Email
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "types": ["node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "files": true
+  }
 }

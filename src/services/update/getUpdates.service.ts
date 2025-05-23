@@ -1,4 +1,4 @@
-import { SourceFeedItem } from '../../Interfaces';
+import { SourceFeedItem } from '../../interfaces';
 import { readRssFeeds } from '../../util/readers/rssreader';
 import { readYoutubeFeeds } from '../../util/readers/youtubeReader';
 

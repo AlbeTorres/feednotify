@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { google } from 'googleapis';
-import { SourceFeedItem, YoutubeVideo } from '../../Interfaces';
+import { SourceFeedItem, YoutubeVideo } from '../../interfaces';
 
 require('dotenv').config(); // eslint-disable-line @typescript-eslint/no-require-imports
 

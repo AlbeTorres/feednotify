@@ -1,5 +1,5 @@
 import Parser from 'rss-parser';
-import { Post, SourceFeedItem } from '../../Interfaces';
+import { Post, SourceFeedItem } from '../../interfaces';
 
 const { htmlToText } = require('html-to-text'); // eslint-disable-line @typescript-eslint/no-require-imports
 

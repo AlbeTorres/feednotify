@@ -5,7 +5,7 @@ import jwt, { JsonWebTokenError, SignOptions } from 'jsonwebtoken';
 import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/jwt.config';
 import { sendTwoFactorTokenMail } from '../../email/sendTwoFactorTokenMail';
 import { sendVerificationMail } from '../../email/sendVerificationMail';
-import { JwtPayload } from '../../Interfaces/jwtPayload.interface';
+import { JwtPayload } from '../../interfaces/jwtPayload.interface';
 
 import { getUserByEmailRepository } from '../../repository/auth/getUserByEmail.repository';
 import { deleteTwoFactorConfirmationTokenRepository } from '../../repository/token/deleteTwoFactorConfirmation.repository';

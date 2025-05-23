@@ -1,4 +1,4 @@
-import { YoutubeVideo } from '../../Interfaces';
+import { YoutubeVideo } from '../../interfaces';
 import { formatDate } from '../../util/arrayDivider';
 
 export const YoutubeVideoCard = ({

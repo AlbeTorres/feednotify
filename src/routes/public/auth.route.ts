@@ -1,12 +1,11 @@
 import express from 'express';
-
-import { emailVerification } from '../controllers/auth/emailVerification.controller';
-import { googleOAuth } from '../controllers/auth/googleOAuth.controller';
-import { login } from '../controllers/auth/login.controller';
-import { register } from '../controllers/auth/register.controller';
-import { resetPassword } from '../controllers/auth/resetPassword.controller';
-import { resetPasswordEmailSender } from '../controllers/auth/resetPasswordEmailSender.controller';
-import errorHandler from '../middleware/errorHandler.middleware';
+import { emailVerification } from '../../controllers/auth/emailVerification.controller';
+import { googleOAuth } from '../../controllers/auth/googleOAuth.controller';
+import { login } from '../../controllers/auth/login.controller';
+import { register } from '../../controllers/auth/register.controller';
+import { resetPassword } from '../../controllers/auth/resetPassword.controller';
+import { resetPasswordEmailSender } from '../../controllers/auth/resetPasswordEmailSender.controller';
+import errorHandler from '../../middleware/errorHandler.middleware';
 
 const router = express.Router();
 

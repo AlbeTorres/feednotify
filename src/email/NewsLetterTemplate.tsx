@@ -1,4 +1,4 @@
-import { RssFeed, YoutubeFeed, YoutubeVideo } from '../Interfaces';
+import { RssFeed, YoutubeFeed, YoutubeVideo } from '../interfaces';
 import { Article } from './components/Article';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
