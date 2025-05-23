@@ -1,29 +1,12 @@
-import { Prisma } from '@prisma/client';
 import createError from 'http-errors';
-import prisma from '../../config/prisma';
+import { getApiKeysByUserIdRepository } from '../../repository/api-key/getApiKeyByUserId.repository';
 import { GetApiKeysByUserIdSchemaType } from '../../validators/apiKey.schema';
 
 export async function getApiKeysByUserIdService({
   userId,
 }: GetApiKeysByUserIdSchemaType) {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        apiKey: {
-          select: {
-            id: true,
-            client_name: true,
-            scopes: true,
-            createdAt: true,
-          },
-        },
-      },
-    });
+    const user = await getApiKeysByUserIdRepository(userId);
 
     if (!user) {
       throw new createError.NotFound('User not found');
@@ -36,9 +19,7 @@ export async function getApiKeysByUserIdService({
       // Ya viene con status y mensaje adecuados
       throw err;
     }
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      throw new createError.InternalServerError('Error de base de datos');
-    }
+
     // —— Falla desconocida ——
     // Log interno útil para debugging (evitar mostrarlo al usuario)
     console.error(err);

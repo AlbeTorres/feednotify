@@ -1,0 +1,33 @@
+import { Prisma } from '@prisma/client';
+import createError from 'http-errors';
+import prisma from '../../config/prisma';
+
+export async function getApiKeysByUserIdRepository(userId: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        apiKey: {
+          select: {
+            id: true,
+            client_name: true,
+            scopes: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+
+    return user;
+  } catch (err: unknown) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new createError.InternalServerError('Error de base de datos');
+    }
+    console.error('Error fetching ApiKeys:', err);
+    throw new createError.InternalServerError(err as string);
+  }
+}

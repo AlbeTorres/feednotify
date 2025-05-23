@@ -1,6 +1,5 @@
-import { Prisma } from '@prisma/client';
 import createError from 'http-errors';
-import prisma from '../../config/prisma';
+import { updateApiKeyRepository } from '../../repository/api-key/updateApikey.repository';
 import { UpdateApiKeySchemaType } from '../../validators/apiKey.schema';
 
 export async function updateApiKeyService({
@@ -11,12 +10,11 @@ export async function updateApiKeyService({
   try {
     // Aquí iría la lógica para actualizar el estado del API Key en la base de datos
     // Por ejemplo, usando Prisma:
-    const updatedApiKey = await prisma.apiKey.update({
-      where: { id: apiKeyId },
-      data: {
-        isActive: status,
-        scopes,
-      },
+
+    const updatedApiKey = await updateApiKeyRepository({
+      apiKeyId,
+      isActive: status,
+      scopes,
     });
 
     const { hashed_key: _, ...rest } = updatedApiKey; // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -27,9 +25,6 @@ export async function updateApiKeyService({
     if (err instanceof createError.HttpError) {
       // Ya viene con status y mensaje adecuados
       throw err;
-    }
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      throw new createError.InternalServerError('Error de base de datos');
     }
     // —— Falla desconocida ——
     // Log interno útil para debugging (evitar mostrarlo al usuario)

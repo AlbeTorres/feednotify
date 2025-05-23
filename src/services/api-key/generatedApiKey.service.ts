@@ -1,7 +1,8 @@
 import { Prisma } from '@prisma/client';
 import * as crypto from 'crypto';
 import createError from 'http-errors';
-import prisma from '../../config/prisma';
+import { generateApiKeyRepository } from '../../repository/api-key/generateApikey.repository';
+import { getUserByIdRepository } from '../../repository/auth/getUserbyId.repository';
 import { GenerateApiKeySchemaType } from '../../validators/apiKey.schema';
 
 export async function generateApiKeyService({
@@ -10,15 +11,7 @@ export async function generateApiKeyService({
   scopes,
 }: GenerateApiKeySchemaType) {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-      },
-    });
+    const user = await getUserByIdRepository(userId);
 
     if (!user) {
       throw new createError.NotFound('User not found');
@@ -30,14 +23,12 @@ export async function generateApiKeyService({
       .update(apiKey)
       .digest('hex');
 
-    await prisma.apiKey.create({
-      data: {
-        client_name,
-        userId,
-        scopes: scopes ?? ['read'],
-        hashed_key: hashedApiKey,
-        createdAt: new Date(),
-      },
+    await generateApiKeyRepository({
+      client_name,
+      userId,
+      scopes: scopes ?? ['read'],
+      hashed_key: hashedApiKey,
+      createdAt: new Date(),
     });
 
     return {
