@@ -31,9 +31,7 @@ export async function loginService({
     const user = await getUserByEmailRepository(email);
 
     if (!user || !user.email || !user.password) {
-      throw new createError.Unauthorized(
-        'Credenciales no válidas: Usuario no encontrado.'
-      ); // Error genérico por seguridad
+      throw new createError.Unauthorized('Invalid Credential: User not Found.'); // Error genérico por seguridad
     }
 
     // Verificar si el usuario tiene un correo electrónico verificado
@@ -108,7 +106,7 @@ export async function loginService({
     // Verificar la contraseña
     // Si el usuario no tiene contraseña, no se puede iniciar sesión
     const valid = await bcryptjs.compare(password, user.password);
-    if (!valid) throw new createError.Unauthorized('Credenciales no válidas.');
+    if (!valid) throw new createError.Unauthorized('Invalid Credential.');
 
     const signOptions: SignOptions = {
       expiresIn: Number(JWT_EXPIRES_IN), // Tiempo de expiración del token
@@ -128,6 +126,7 @@ export async function loginService({
       token,
       user: payload,
       success: true,
+      state: 'success',
       msg: 'Login successful!',
     };
   } catch (err: unknown) {
@@ -138,14 +137,14 @@ export async function loginService({
     }
 
     if (err instanceof JsonWebTokenError) {
-      throw new createError.InternalServerError('Error al generar token');
+      throw new createError.InternalServerError('Token Generation Error');
     }
 
     // —— Falla desconocida ——
     // Log interno útil para debugging (evitar mostrarlo al usuario)
     console.error('[Login Error]', err);
     throw new createError.InternalServerError(
-      'Error inesperado al iniciar sesión'
+      'Unespected Error Starting Session'
     );
   }
 }

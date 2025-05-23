@@ -11,11 +11,10 @@ app.use(cors());
 
 //Habilitar Express.json
 app.use(express.json());
+app.use(errorHandler);
 
 //rutas
-app.use('/api/', routes);
-
-app.use(errorHandler);
+app.use('/api', routes);
 
 // puerto de la app
 const PORT = process.env.PORT || 4000;

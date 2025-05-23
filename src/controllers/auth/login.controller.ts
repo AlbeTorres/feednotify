@@ -5,16 +5,19 @@ import { loginService } from '../../services/auth/login.service';
 import { LoginSchema } from '../../validators/auth.schema';
 
 export async function login(req: Request, res: Response) {
+  console.log('Login controller');
+  console.log('req.body', req.body);
   const { email, password, code } = req.body;
 
   const validatedFields = LoginSchema.safeParse({ email, password, code });
 
   if (!validatedFields.success) {
-    throw new createError.BadRequest('Datos de entrada inválidos'); // Error genérico por seguridad
+    throw new createError.BadRequest('Invalid Entry Data'); // Error genérico por seguridad
   }
 
   try {
     const response = await loginService({ email, password, code });
+    console.log('response', response);
 
     switch (response.state) {
       case 'unverificated_email':
@@ -43,7 +46,7 @@ export async function login(req: Request, res: Response) {
     }
     if (err instanceof z.ZodError) {
       // Nunca debería llegar aquí porque lo validamos antes, pero…
-      throw new createError.BadRequest('Error de validación interno');
+      throw new createError.BadRequest('Internal Validation Error');
     }
   }
 }
