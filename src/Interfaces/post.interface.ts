@@ -10,4 +10,5 @@ export interface Post {
   isoDate: string;
   categories: string[];
   creator: string;
+  image?: string;
 }
