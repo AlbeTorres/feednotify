@@ -1,5 +1,6 @@
 import Parser from 'rss-parser';
 import { Post, SourceFeedItem } from '../../interfaces';
+import { sourcePost } from '../../interfaces/post.interface';
 
 const { htmlToText } = require('html-to-text'); // eslint-disable-line @typescript-eslint/no-require-imports
 
@@ -22,6 +23,7 @@ export async function readRssFeeds(
         );
 
         return {
+          image: parsed.image?.url,
           id: feed.id,
           name: feed.name,
           url: feed.url,
@@ -37,7 +39,10 @@ export async function readRssFeeds(
   return feedResponse.filter((feed) => feed !== undefined);
 }
 
-function filterItems(parsedItems: Post[], pubDateThreshold: Date): Post[] {
+function filterItems(
+  parsedItems: sourcePost[],
+  pubDateThreshold: Date
+): Post[] {
   //Check if the feed has items
   if (!parsedItems || parsedItems.length === 0) {
     return [];
@@ -51,16 +56,27 @@ function filterItems(parsedItems: Post[], pubDateThreshold: Date): Post[] {
       const itemDate = new Date(item.pubDate);
       return !isNaN(itemDate.getTime()) && itemDate > pubDateThreshold;
     })
-    .map((item) => ({
-      title: item.title,
-      link: item.link,
-      content: getContent(item),
-      pubDate: item.pubDate,
-      guid: item.guid,
-      isoDate: item.isoDate,
-      categories: item.categories,
-      creator: item.creator,
-    }));
+    .map((item) => {
+      let img = item.enclosure?.url || null;
+
+      if (!img) {
+        img = extractImageFromHTML(
+          item['content:encoded'] || item.content || item.summary || ''
+        );
+      }
+
+      return {
+        title: item.title,
+        link: item.link,
+        content: getContent(item),
+        pubDate: item.pubDate,
+        guid: item.guid,
+        isoDate: item.isoDate,
+        categories: item.categories,
+        creator: item.creator,
+        image: img,
+      };
+    });
 }
 
 function getContent(item: Post): string {
@@ -73,4 +89,29 @@ function getContent(item: Post): string {
   } else {
     return item.summary || '';
   }
+}
+
+// 2. ESTRATEGIA: Extraer de HTML content/description
+export function extractImageFromHTML(htmlContent: string): string | null {
+  if (!htmlContent) return null;
+
+  // Buscar la primera imagen en el HTML
+  const imgRegex = /<img[^>]+src\s*=\s*['"']([^'"']+)['"'][^>]*>/i;
+  const match = htmlContent.match(imgRegex);
+
+  if (match && match[1]) {
+    let imageUrl = match[1];
+
+    // Convertir URLs relativas a absolutas si es necesario
+    if (imageUrl.startsWith('//')) {
+      imageUrl = 'https:' + imageUrl;
+    } else if (imageUrl.startsWith('/')) {
+      // Necesitarías el dominio base del blog
+      // imageUrl = 'https://blogdomain.com' + imageUrl;
+    }
+
+    return imageUrl;
+  }
+
+  return null;
 }

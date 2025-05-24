@@ -10,7 +10,7 @@ export const sendNewsLetterMail = async (
 ) => {
   const transporter = createMailTransporter();
 
-  const html = await render(<NewsletterTemplate name={name} data={feed} />);
+  const html = await render(<NewsletterTemplate userName={name} data={feed} />);
 
   const mailOptions = {
     from: '"Albe de financeApp", <financeApp-pi.vercel.app>',

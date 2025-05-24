@@ -1,4 +1,4 @@
-import { formatDate } from '../../util/arrayDivider';
+import { formatDate, truncateText } from '../../util/arrayDivider';
 
 type Props = {
   href: string;
@@ -8,6 +8,7 @@ type Props = {
   creator: string;
   categories: string[];
   date: string;
+  image?: string | null;
 };
 
 export const Article = ({
@@ -17,10 +18,32 @@ export const Article = ({
   creator,
   categories,
   content,
+  image,
   date,
 }: Props) => (
-  <tr key={guid}>
+  <tr key={guid} style={{ backgroundColor: image ? '#' : '#f9f9f9' }}>
     <td style={{ paddingTop: '16px', paddingBottom: '16px' }}>
+      {image && (
+        <a
+          href={href}
+          style={{
+            textDecoration: 'none',
+            display: 'block',
+            marginTop: '8px',
+          }}
+        >
+          <img
+            src={image}
+            alt="Read more"
+            style={{
+              width: '25rem',
+              height: '14rem',
+              verticalAlign: 'middle',
+              marginRight: '4px',
+            }}
+          />
+        </a>
+      )}
       <a
         href={href}
         style={{
@@ -34,11 +57,14 @@ export const Article = ({
       >
         {title}
       </a>
-      <p style={{ fontSize: '14px', color: '#666666', margin: '0 0 8px 0' }}>
+      <p style={{ fontSize: '10px', color: '#666666', margin: '0 0 8px 0' }}>
         {creator && `By ${creator} • `}
         {formatDate(date)}
         {categories && categories.length > 0 && (
-          <span> • {categories.join(', ')}</span>
+          <span style={{ lineClamp: 2 }}>
+            {' '}
+            • {truncateText(categories.join(', '))}
+          </span>
         )}
       </p>
       <p
@@ -48,13 +74,14 @@ export const Article = ({
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           display: '-webkit-box',
+          lineClamp: 2,
           WebkitLineClamp: 2,
           WebkitBoxOrient: 'vertical',
           lineHeight: '1.4', // Ajusta según gusto
           height: '2.8em', // 1.4 * 2 líneas
         }}
       >
-        {content}
+        {truncateText(content)}
       </p>
     </td>
   </tr>

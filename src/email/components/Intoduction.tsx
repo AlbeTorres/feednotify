@@ -10,9 +10,9 @@ export const Introduction = ({ name }: { name: string }) => (
       >
         <p style={{ margin: '0 0 16px 0' }}>Hello {name},</p>
         <p style={{ margin: '0 0 16px 0' }}>
-          Here's your weekly roundup of the latest tech news, articles, and
-          videos. Stay informed with the most interesting content from your
-          favorite sources.
+          Here's your weekly roundup of the latest news, articles, and videos.
+          Stay informed with the most interesting content from your favorite
+          sources.
         </p>
       </td>
     </tr>

@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   getLastWeekUpdates,
+  getUnfilteredUpdates,
   getUpdatesSince,
 } from '../../controllers/update.controller';
 
@@ -12,5 +13,7 @@ router.get('/', getUpdatesSince);
 
 //obtener todos los updates desde la ultima fecha de actualizacion
 router.get('/last-week', getLastWeekUpdates);
+//obtener todos los updates desde la ultima fecha de actualizacion
+router.get('/unfiltered', getUnfilteredUpdates);
 
 export default router;
