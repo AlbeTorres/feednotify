@@ -3,14 +3,14 @@ import createError from 'http-errors';
 import prisma from '../../config/prisma';
 
 type Props = {
-  id: string;
+  sourceId: string;
   userId: string;
 };
 
-export async function getSourceByIdRepository({ id, userId }: Props) {
+export async function getSourceByIdRepository({ sourceId, userId }: Props) {
   try {
     const sources = await prisma.source.findUnique({
-      where: { id, userId },
+      where: { id: sourceId, userId },
     });
 
     return sources;
