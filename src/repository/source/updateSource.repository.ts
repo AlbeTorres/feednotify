@@ -3,15 +3,15 @@ import createError from 'http-errors';
 import prisma from '../../config/prisma';
 
 type Props = {
-  id: string;
+  sourceId: string;
   type: string;
   name: string;
   url: string;
-  userId: string; // Aunque no se usa aquí, puede ser útil para futuras validaciones o auditorías
+  userId: string;
 };
 
 export async function updateSourceRepository({
-  id,
+  sourceId,
   type,
   name,
   url,
@@ -19,12 +19,12 @@ export async function updateSourceRepository({
 }: Props) {
   try {
     const source = await prisma.source.update({
-      where: { id, userId }, // Asegurarse de que el usuario tiene permiso para actualizar esta fuente
+      where: { id: sourceId, userId },
       data: {
         name,
         type,
         url,
-        updatedAt: new Date(), // Actualizar la fecha de modificación
+        updatedAt: new Date(),
       },
     });
 

@@ -7,7 +7,7 @@ type Props = {
   userId: string;
 };
 
-export async function getSourcesByUserRepository({ id, userId }: Props) {
+export async function getSourceByIdRepository({ id, userId }: Props) {
   try {
     const sources = await prisma.source.findUnique({
       where: { id, userId },

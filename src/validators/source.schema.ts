@@ -5,18 +5,46 @@ export const CreateSourceSchema = z
     name: z.string().min(3),
     type: z.string(),
     url: z.string().url(),
+    userId: z.string().uuid(),
   })
-  .strict(); // Para evitar que se envíen campos no válidos
+  .strict(); // This avoid sending invalid fields
 
 export const UpdateSourceSchema = z
   .object({
-    id: z.string().min(1),
+    sourceId: z.string().uuid(),
     name: z.string().min(3),
     type: z.string(),
     url: z.string().url(),
+    userId: z.string().uuid(),
   })
-  .strict(); // Para evitar que se envíen campos no válidos
+  .strict(); // This avoid sending invalid fields
+
+export const DeleteSourceSchema = z
+  .object({
+    sourceId: z.string().uuid(),
+    userId: z.string().uuid(),
+  })
+  .strict(); // This avoid sending invalid fields
+
+export const GetSourcesByUserSchema = z
+  .object({
+    userId: z.string().uuid(),
+  })
+  .strict(); // This avoid sending invalid fields
+
+export const GetSourceByIdSchema = z
+  .object({
+    sourceId: z.string().uuid(),
+    userId: z.string().uuid(),
+  })
+  .strict();
+
+export type GetSourceByIdSchemaType = z.infer<typeof GetSourceByIdSchema>;
+
+export type GetSourcesByUserSchemaType = z.infer<typeof GetSourcesByUserSchema>;
 
 export type UpdateSourceSchemaType = z.infer<typeof UpdateSourceSchema>;
+
+export type DeleteSourceSchemaType = z.infer<typeof DeleteSourceSchema>;
 
 export type CreateSourceSchemaType = z.infer<typeof CreateSourceSchema>;

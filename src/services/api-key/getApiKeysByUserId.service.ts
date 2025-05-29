@@ -14,15 +14,11 @@ export async function getApiKeysByUserIdService({
 
     return { success: true, user };
   } catch (err) {
-    // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {
-      // Ya viene con status y mensaje adecuados
       throw err;
     }
 
-    // —— Falla desconocida ——
-    // Log interno útil para debugging (evitar mostrarlo al usuario)
     console.error(err);
-    throw new createError.InternalServerError('Error interno del servidor');
+    throw new createError.InternalServerError('Server internal error');
   }
 }

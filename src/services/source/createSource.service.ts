@@ -2,10 +2,12 @@ import createError from 'http-errors';
 import { createSourceRepository } from '../../repository/source/createSource.repository';
 import { CreateSourceSchemaType } from '../../validators/source.schema';
 
-export async function createSourceService(
-  { type, name, url }: CreateSourceSchemaType,
-  userId: string
-) {
+export async function createSourceService({
+  type,
+  name,
+  url,
+  userId,
+}: CreateSourceSchemaType) {
   try {
     // Llamar al repositorio para crear la fuente
     const newSource = await createSourceRepository({

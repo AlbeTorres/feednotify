@@ -3,14 +3,12 @@ import { deleteApiKey } from '../../controllers/api-keys/deleteApiKey.controller
 import { generateApiKey } from '../../controllers/api-keys/generateApiKey.controller';
 import { getApiKeysByUserId } from '../../controllers/api-keys/getApiKeyByUserId.controller';
 import { updateApiKey } from '../../controllers/api-keys/updateApiKey.controller';
-import authMiddleware from '../../middleware/auth.middleware';
-import errorHandler from '../../middleware/errorHandler.middleware';
 
 const router = express.Router();
 
-router.post('/generateapikey', authMiddleware, errorHandler, generateApiKey);
-router.post('/updateapikey', authMiddleware, errorHandler, updateApiKey);
-router.post('/getapikey', authMiddleware, errorHandler, getApiKeysByUserId);
-router.post('/deleteapikey', authMiddleware, errorHandler, deleteApiKey);
+router.post('/generate-apikey', generateApiKey);
+router.post('/update-apikey', updateApiKey);
+router.post('/get-apikey', getApiKeysByUserId);
+router.post('/delete-apikey', deleteApiKey);
 
 export default router;

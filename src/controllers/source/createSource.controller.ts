@@ -14,7 +14,7 @@ export async function createSource(req: Request, res: Response) {
   });
 
   if (!validatedFields.success) {
-    throw new createError.BadRequest('Invalid Input data'); // Error genérico por seguridad
+    throw new createError.BadRequest('Invalid Input data');
   }
 
   const userId = req.user?.id;
@@ -24,8 +24,7 @@ export async function createSource(req: Request, res: Response) {
   }
 
   try {
-    // Asumiendo que el ID del usuario está en req.user.id
-    const response = await createSourceService({ type, name, url }, userId);
+    const response = await createSourceService({ type, name, url, userId });
 
     if (response.success) {
       res
@@ -35,18 +34,16 @@ export async function createSource(req: Request, res: Response) {
       throw new createError.InternalServerError('Error creating source');
     }
   } catch (err: unknown) {
-    // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {
-      // Ya viene con status y mensaje adecuados
       throw err;
     }
 
     if (err instanceof z.ZodError) {
-      // Nunca debería llegar aquí porque lo validamos antes, pero…
-      throw new createError.BadRequest('Error de validación interno');
+      throw new createError.BadRequest(
+        'Internal valiadation error: ' + err.message
+      );
     }
-    // —— Falla desconocida ——
-    // Log interno útil para debugging (evitar mostrarlo al usuario)
+
     console.error('[Create Source Error]', err);
     throw new createError.InternalServerError(
       'Unespected error creating source: ' + (err as string)

@@ -3,15 +3,17 @@ import createError from 'http-errors';
 import prisma from '../../config/prisma';
 
 type Props = {
-  id: string;
+  sourceId: string;
   userId: string;
 };
 
-export async function deleteSourceRepository({ id, userId }: Props) {
+export async function deleteSourceRepository({ sourceId, userId }: Props) {
   try {
     await prisma.source.delete({
-      where: { id, userId },
+      where: { id: sourceId, userId },
     });
+
+    return { success: true, msg: 'Source deleted successfully!' };
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       throw new createError.InternalServerError('Error deleting source');
