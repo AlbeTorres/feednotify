@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { sendNewsLetterMail } from '../email/sendFeedNewsletter';
+import { sendNewsLetterMail } from '../../email/sendFeedNewsletter';
 
-import { getUpdatesByDate } from '../services/update/getUpdates.service';
-import { email, feeds, name } from '../util/data';
+import { getUpdatesByDate } from '../../services/update/getUpdates.service';
+import { email, feeds, name } from '../../util/data';
 
 export async function sendNewsletter(req: Request, res: Response) {
   // Implementación de la función para enviar el boletín

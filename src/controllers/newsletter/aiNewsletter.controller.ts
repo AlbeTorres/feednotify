@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
-import { sendNewsLetterAIMail } from '../email/sendNewsLetterAiMail';
-import { createAiNewsletterFromSources } from '../services/update/createAINewsletter.service';
-import { email, feeds, name } from '../util/data';
+import { sendNewsLetterAIMail } from '../../email/sendNewsLetterAiMail';
+import { createAiNewsletterFromSources } from '../../services/newsletter/createAINewsletter.service';
+import { email, feeds, name } from '../../util/data';
 
 export async function sendAINewsletter(req: Request, res: Response) {
   // Implementación de la función para enviar el boletín

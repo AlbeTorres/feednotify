@@ -1,8 +1,8 @@
 import express from 'express';
-import { deleteApiKey } from '../../controllers/api-keys/deleteApiKey.controller';
-import { generateApiKey } from '../../controllers/api-keys/generateApiKey.controller';
-import { getApiKeysByUserId } from '../../controllers/api-keys/getApiKeyByUserId.controller';
-import { updateApiKey } from '../../controllers/api-keys/updateApiKey.controller';
+import { deleteApiKey } from '../../controllers/api-key/deleteApiKey.controller';
+import { generateApiKey } from '../../controllers/api-key/generateApiKey.controller';
+import { getApiKeysByUserId } from '../../controllers/api-key/getApiKeyByUserId.controller';
+import { updateApiKey } from '../../controllers/api-key/updateApiKey.controller';
 
 const router = express.Router();
 
