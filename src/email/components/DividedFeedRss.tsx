@@ -2,7 +2,7 @@
 // import { formatDate } from '../../util/arrayDivider';
 
 import { Post, RssFeed } from '../../interfaces';
-import { formatDate } from '../../util/arrayDivider';
+import { formatDate } from '../../util/formatDate';
 
 export const DividedFeedRss = ({ id, name, posts, image }: RssFeed) => {
   return (

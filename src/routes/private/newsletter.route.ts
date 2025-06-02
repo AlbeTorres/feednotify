@@ -1,6 +1,6 @@
 import express from 'express';
-import { sendAINewsletter } from '../../controllers/aiNewsletter.controller';
-import { sendNewsletter } from '../../controllers/newsletter.controller';
+import { sendAINewsletter } from '../../controllers/newsletter/aiNewsletter.controller';
+import { sendNewsletter } from '../../controllers/newsletter/newsletter.controller';
 
 const router = express.Router();
 

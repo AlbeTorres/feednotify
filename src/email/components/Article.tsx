@@ -1,4 +1,5 @@
-import { formatDate, truncateText } from '../../util/arrayDivider';
+import { formatDate } from '../../util/formatDate';
+import { truncateText } from '../../util/truncateText';
 
 type Props = {
   href: string;

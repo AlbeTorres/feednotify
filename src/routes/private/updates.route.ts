@@ -3,7 +3,7 @@ import {
   getLastWeekUpdates,
   getUnfilteredUpdates,
   getUpdatesSince,
-} from '../../controllers/update.controller';
+} from '../../controllers/update/update.controller';
 
 const router = express.Router();
 
