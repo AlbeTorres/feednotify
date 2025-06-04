@@ -1,6 +1,7 @@
 import { Job, Worker } from 'bullmq';
 import connection from '../config/redis';
 import { NewsletterJobData } from '../interfaces/newsletterJobData';
+import { weeklyNewsletterFromSourcesService } from '../services/newsletter/weeklyNewsletter.service';
 
 export const newsletterWorker = new Worker<NewsletterJobData>(
   'newsletter',
@@ -13,14 +14,18 @@ export const newsletterWorker = new Worker<NewsletterJobData>(
     console.log(`${day} `);
 
     try {
-      //Optener la info del user por su id
-      //optener las sources de la base de datos
-      // 1. Leer RSS y YouTube con fecha actual
+      // Optener la info del user por su id
+      // Optener las sources de la base de datos
+      // Leer RSS y YouTube con fecha actual
+      // Crear contenido de newsletter
+      // Enviar el correo
+
       const currentDate = new Date();
+      const lastWeek = new Date();
+      // Restar 7 días para obtener la fecha de hace una semana
+      lastWeek.setDate(lastWeek.getDate() - 7);
 
-      // 2. Crear contenido de newsletter
-
-      // 3. Enviar el correo
+      await weeklyNewsletterFromSourcesService(userId, lastWeek);
 
       console.log(`✅ Newsletter sent successfully to userEmail`);
 

@@ -7,21 +7,9 @@ import { getSourcesByUserRepository } from '../../repository/source/getSourcesBy
 import { readRssFeeds } from '../../util/readers/rssreader';
 import { readYoutubeFeeds } from '../../util/readers/youtubeReader';
 
-const WEEKDAYS = {
-  Sunday: 0,
-  Monday: 1,
-  Tuesday: 2,
-  Wednesday: 3,
-  Thursday: 4,
-  Friday: 5,
-  Saturday: 6,
-};
-type Weekday = keyof typeof WEEKDAYS;
-
-export async function weeklyNewsletterFromSources(
+export async function weeklyNewsletterFromSourcesService(
   userId: string,
-  date: Date,
-  day: Weekday = 'Monday' // Default to Monday if not provided
+  date: Date
 ) {
   try {
     const user = await getUserByIdRepository(userId);
@@ -41,7 +29,6 @@ export async function weeklyNewsletterFromSources(
     const newletterContent = {
       rssFeed,
       youtubeFeed,
-      day: WEEKDAYS[day],
     };
 
     await sendNewsLetterMail(

@@ -1,6 +1,7 @@
 import express from 'express';
 import { sendAINewsletter } from '../../controllers/newsletter/aiNewsletter.controller';
 import { sendNewsletter } from '../../controllers/newsletter/newsletter.controller';
+import { weeklyNewsletter } from '../../controllers/newsletter/weeklyNewsletter.controller';
 
 const router = express.Router();
 
@@ -8,5 +9,6 @@ const router = express.Router();
 // /api/updates?since=2024-12-01
 router.get('/', sendNewsletter);
 router.get('/ai', sendAINewsletter);
+router.get('/schedule', weeklyNewsletter);
 
 export default router;
