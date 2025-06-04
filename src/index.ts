@@ -3,6 +3,8 @@ import express from 'express';
 import errorHandler from './middleware/errorHandler.middleware';
 import routes from './routes';
 
+import './workers/weeklyNewsletter.worker';
+
 // crear eL servidor
 const app = express();
 
