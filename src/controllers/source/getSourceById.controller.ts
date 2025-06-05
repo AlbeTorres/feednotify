@@ -2,21 +2,21 @@ import { Request, Response } from 'express';
 import createError from 'http-errors';
 import * as z from 'zod';
 
-import { getSourceByIdService } from '../../services/source/getSourcebyId.service';
+import { getSourceByIdService } from '../../services/source/getSourceById.service';
 import { GetSourceByIdSchema } from '../../validators/source.schema';
 
 export async function getSourceById(req: Request, res: Response) {
-  const { sourceId } = req.params;
+  const { sourceId } = req.body;
+  const userId = req.user?.id;
 
   const validatedFields = GetSourceByIdSchema.safeParse({
     sourceId,
+    userId,
   });
 
   if (!validatedFields.success) {
     throw new createError.BadRequest('Invalid Input data');
   }
-
-  const userId = req.user?.id;
 
   if (!userId) {
     throw new createError.Unauthorized('User ID is required');
