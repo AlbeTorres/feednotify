@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-
-import { getUpdatesUnFiltered } from '../services/update/getUnfilteredUpdates.service';
-import { getUpdatesByDate } from '../services/update/getUpdates.service';
-import { feeds } from '../util/data';
+import { getUpdatesUnFiltered } from '../../services/update/getUnfilteredUpdates.service';
+import { getUpdatesByDate } from '../../services/update/getUpdates.service';
+import { feeds } from '../../util/data';
 
 export async function getUpdatesSince(req: Request, res: Response) {
   try {
