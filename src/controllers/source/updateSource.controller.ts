@@ -5,19 +5,19 @@ import { updateSourceService } from '../../services/source/updateSource.service'
 import { UpdateSourceSchema } from '../../validators/source.schema';
 export async function updateSource(req: Request, res: Response) {
   const { sourceId, name, type, url } = req.body;
-  const userId = req.user?.id;
 
   const validatedFields = UpdateSourceSchema.safeParse({
     sourceId,
     name,
     type,
     url,
-    userId,
   });
 
   if (!validatedFields.success) {
     throw new createError.BadRequest('Invalid input data');
   }
+
+  const userId = req.user?.id;
 
   if (!userId) {
     throw new createError.Unauthorized('User ID is required');

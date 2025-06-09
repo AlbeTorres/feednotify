@@ -6,18 +6,18 @@ import { CreateSourceSchema } from '../../validators/source.schema';
 
 export async function createSource(req: Request, res: Response) {
   const { name, type, url } = req.body;
-  const userId = req.user?.id;
 
   const validatedFields = CreateSourceSchema.safeParse({
     type,
     url,
     name,
-    userId,
   });
 
   if (!validatedFields.success) {
     throw new createError.BadRequest('Invalid Input data');
   }
+
+  const userId = req.user?.id;
 
   if (!userId) {
     throw new createError.Unauthorized('User ID is required');

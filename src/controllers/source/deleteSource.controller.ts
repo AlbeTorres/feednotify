@@ -5,17 +5,17 @@ import * as z from 'zod';
 import { deleteSourceService } from '../../services/source/deleteSource.service';
 import { DeleteSourceSchema } from '../../validators/source.schema';
 export async function deleteSource(req: Request, res: Response) {
-  const { sourceId } = req.body;
-  const userId = req.user?.id;
+  const { sourceId } = req.params;
 
   const validatedFields = DeleteSourceSchema.safeParse({
     sourceId,
-    userId,
   });
 
   if (!validatedFields.success) {
     throw new createError.BadRequest('Invalid Input data');
   }
+
+  const userId = req.user?.id;
 
   if (!userId) {
     throw new createError.Unauthorized('User ID is required');

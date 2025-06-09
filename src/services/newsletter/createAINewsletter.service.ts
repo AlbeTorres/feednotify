@@ -19,7 +19,9 @@ export async function createAiNewsletterFromSources(
 
     return newletterContent;
   } catch (err: unknown) {
+    // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {
+      // Ya viene con status y mensaje adecuados
       throw err;
     }
 
