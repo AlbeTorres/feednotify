@@ -9,6 +9,17 @@ export const CreateSourceSchema = z
   })
   .strict(); // This avoid sending invalid fields
 
+export const CreateBulkSourceSchema = z
+  .object({
+    name: z.string().min(3),
+    type: z.string(),
+    category: z.string().optional(),
+    url: z.string().url(),
+  })
+  .strict(); // This avoid sending invalid fields
+
+export const CreateBulkSourceArraySchema = z.array(CreateBulkSourceSchema);
+
 export const UpdateSourceSchema = z
   .object({
     sourceId: z.string().uuid(),
@@ -48,3 +59,4 @@ export type UpdateSourceSchemaType = z.infer<typeof UpdateSourceSchema>;
 export type DeleteSourceSchemaType = z.infer<typeof DeleteSourceSchema>;
 
 export type CreateSourceSchemaType = z.infer<typeof CreateSourceSchema>;
+export type CreateBulkSourceSchemaType = z.infer<typeof CreateBulkSourceSchema>;

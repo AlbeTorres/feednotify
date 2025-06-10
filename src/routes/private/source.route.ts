@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { createBulkSource } from '../../controllers/source/createBulkSource.controller';
 import { createSource } from '../../controllers/source/createSource.controller';
 import { deleteSource } from '../../controllers/source/deleteSource.controller';
 import { getSourceById } from '../../controllers/source/getSourceById.controller';
@@ -12,6 +13,11 @@ const router = express.Router();
 router
   .route('/create-source')
   .post(createSource)
+  .all(methodNotAllowed(['POST']));
+
+router
+  .route('/create-bulk-source')
+  .post(createBulkSource)
   .all(methodNotAllowed(['POST']));
 
 router
