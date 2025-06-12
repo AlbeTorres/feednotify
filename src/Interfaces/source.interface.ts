@@ -1,4 +1,4 @@
-export interface SourceFeedItem {
+export interface Source {
   id: string;
   type: string;
   name: string;

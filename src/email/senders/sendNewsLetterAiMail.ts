@@ -1,4 +1,4 @@
-import { createMailTransporter } from './createMail.transporter';
+import { createMailTransporter } from '../createMail.transporter';
 
 export const sendNewsLetterAIMail = async (
   email: string,

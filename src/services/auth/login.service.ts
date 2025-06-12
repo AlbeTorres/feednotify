@@ -3,8 +3,8 @@ import createError from 'http-errors';
 import jwt, { JsonWebTokenError, SignOptions } from 'jsonwebtoken';
 
 import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/jwt.config';
-import { sendTwoFactorTokenMail } from '../../email/sendTwoFactorTokenMail';
-import { sendVerificationMail } from '../../email/sendVerificationMail';
+import { sendTwoFactorTokenMail } from '../../email/senders/sendTwoFactorTokenMail';
+import { sendVerificationMail } from '../../email/senders/sendVerificationMail';
 import { JwtPayload } from '../../interfaces/jwtPayload.interface';
 
 import { getUserByEmailRepository } from '../../repository/auth/getUserByEmail.repository';

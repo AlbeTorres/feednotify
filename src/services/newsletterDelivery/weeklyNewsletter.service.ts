@@ -1,7 +1,7 @@
 import createError from 'http-errors';
 
 import { Prisma } from '@prisma/client';
-import { sendNewsLetterMail } from '../../email/sendFeedNewsletter';
+import { sendNewsLetterMail } from '../../email/templates/sendFeedNewsletter';
 import { getUserByIdRepository } from '../../repository/auth/getUserbyId.repository';
 import { getSourcesByUserRepository } from '../../repository/source/getSourcesByUser.repository';
 import { readRssFeeds } from '../../util/readers/rssreader';

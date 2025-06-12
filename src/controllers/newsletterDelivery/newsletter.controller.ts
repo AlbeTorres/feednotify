@@ -1,18 +1,22 @@
 import { Request, Response } from 'express';
+import { sendNewsLetterMail } from '../../email/templates/sendFeedNewsletter';
 
-import { sendNewsLetterAIMail } from '../../email/sendNewsLetterAiMail';
-import { createAiNewsletterFromSources } from '../../services/newsletter/createAINewsletter.service';
+import { getUpdatesByDate } from '../../services/update/getUpdates.service';
 import { email, feeds, name } from '../../util/data';
 
-export async function sendAINewsletter(req: Request, res: Response) {
+export async function sendNewsletter(req: Request, res: Response) {
   // Implementación de la función para enviar el boletín
   const lastWeek = new Date();
   lastWeek.setDate(lastWeek.getDate() - 7);
 
   try {
-    const feedUpdates = await createAiNewsletterFromSources(feeds, lastWeek);
+    const feedUpdates = await getUpdatesByDate(feeds, lastWeek);
 
-    await sendNewsLetterAIMail(email, feedUpdates, name);
+    await sendNewsLetterMail(
+      email,
+      { rss: feedUpdates.rssFeed, youtube: feedUpdates.youtubeFeed },
+      name
+    );
     console.log('Enviando boletín...');
 
     res.json('Boletín enviado con éxito');

@@ -1,8 +1,8 @@
 import express from 'express';
-import { sendAINewsletter } from '../../controllers/newsletter/aiNewsletter.controller';
-import { cancelarScheduledNewsletter } from '../../controllers/newsletter/cancelScheduleNewsletter.controller';
-import { sendNewsletter } from '../../controllers/newsletter/newsletter.controller';
-import { weeklyNewsletter } from '../../controllers/newsletter/weeklyNewsletter.controller';
+import { sendAINewsletter } from '../../controllers/newsletterDelivery/aiNewsletter.controller';
+import { cancelarScheduledNewsletter } from '../../controllers/newsletterDelivery/cancelScheduleNewsletter.controller';
+import { sendNewsletter } from '../../controllers/newsletterDelivery/newsletter.controller';
+import { weeklyNewsletter } from '../../controllers/newsletterDelivery/weeklyNewsletter.controller';
 
 const router = express.Router();
 
