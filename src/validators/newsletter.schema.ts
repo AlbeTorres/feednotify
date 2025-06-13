@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UpdateSourceSchema } from './source.schema';
 export const WeeklyNewsletterSchema = z
   .object({
     day: z.enum([
@@ -13,4 +14,43 @@ export const WeeklyNewsletterSchema = z
   })
   .strict();
 
+export const CreateNewsletterSchema = z.object({
+  userId: z.string().uuid(),
+  name: z.string().min(3),
+  category: z.string(),
+  sources: z.array(UpdateSourceSchema),
+});
+
+export const UpdateNewsletterSchema = z.object({
+  newsletterId: z.string().uuid(),
+  name: z.string().min(3),
+  category: z.string(),
+  userId: z.string().uuid(),
+  sources: z.array(UpdateSourceSchema),
+});
+
+export const DeleteNewsletterSchema = z.object({
+  newsletterId: z.string().uuid(),
+  userId: z.string().uuid(),
+});
+
+export const GetNewsletterByUserSchema = z.object({
+  userId: z.string().uuid(),
+});
+
+export const GetNewsletterByIdSchema = z.object({
+  newsletterId: z.string().uuid(),
+  userId: z.string().uuid(),
+});
+
+export type GetNewsletterByIdSchemaType = z.infer<
+  typeof GetNewsletterByIdSchema
+>;
+
+export type GetNewsletterByUserSchemaType = z.infer<
+  typeof GetNewsletterByUserSchema
+>;
+export type DeleteNewsletterSchemaType = z.infer<typeof DeleteNewsletterSchema>;
+export type CreateNewsletterSchemaType = z.infer<typeof CreateNewsletterSchema>;
+export type UpdateNewsletterSchemaType = z.infer<typeof UpdateNewsletterSchema>;
 export type WeeklyNewsletterSchemaType = z.infer<typeof WeeklyNewsletterSchema>;

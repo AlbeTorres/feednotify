@@ -5,7 +5,7 @@ import { Source } from '../../interfaces';
 
 type Props = {
   newsletterId: string;
-  type: string;
+  category: string;
   name: string;
   sources: Source[];
   userId: string;
@@ -14,7 +14,7 @@ type Props = {
 export async function updateNewsletterRepository({
   newsletterId,
   userId,
-  type,
+  category,
   name,
   sources,
 }: Props) {
@@ -23,7 +23,7 @@ export async function updateNewsletterRepository({
       where: { id: newsletterId, userId },
       data: {
         name,
-        type,
+        category,
         source: {
           connect: sources.map((s) => ({ id: s.id })),
         },

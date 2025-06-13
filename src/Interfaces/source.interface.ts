@@ -1,6 +1,7 @@
 export interface Source {
-  id: string;
+  sourceId: string;
   type: string;
+  category?: string;
   name: string;
   url: string;
 }

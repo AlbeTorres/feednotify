@@ -4,7 +4,7 @@ import prisma from '../../config/prisma';
 import { Source } from '../../interfaces';
 
 type Props = {
-  type: string;
+  category: string;
   name: string;
   sources: Source[];
   userId: string;
@@ -12,7 +12,7 @@ type Props = {
 
 export async function createNewsletterRepository({
   userId,
-  type,
+  category,
   name,
   sources,
 }: Props) {
@@ -20,9 +20,9 @@ export async function createNewsletterRepository({
     const newNewsletter = await prisma.newsletter.create({
       data: {
         name,
-        type,
+        category,
         source: {
-          connect: sources.map((s) => ({ id: s.id })),
+          connect: sources.map((s) => ({ id: s.sourceId })),
         },
         userId,
       },
