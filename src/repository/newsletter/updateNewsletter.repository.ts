@@ -25,7 +25,7 @@ export async function updateNewsletterRepository({
         name,
         category,
         source: {
-          connect: sources.map((s) => ({ id: s.id })),
+          connect: sources.map((s) => ({ id: s.sourceId })),
         },
         userId,
       },
