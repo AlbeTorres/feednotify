@@ -1,8 +1,10 @@
 // import { Post, RssFeed } from '../../interfaces';
 // import { formatDate } from '../../util/arrayDivider';
 
-import { Post, RssFeed } from '../../interfaces';
-import { formatDate } from '../../util/formatDate';
+import { Post, RssFeed } from "../../../Interfaces";
+import { formatDate } from "../../../util/formatDate";
+
+
 
 export const DividedFeedRss = ({ id, name, posts, image }: RssFeed) => {
   return (
