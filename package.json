@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
+    "dev": "nodemon --watch src --ext ts --exec \"npx tsx src/index.ts\"",
     "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "nodemon --watch src/**/*.ts --exec \"npx ts-node\" src/index.ts"
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +25,6 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
-    "eslint": "^9.25.1",
     "express": "^5.1.0",
     "google-auth-library": "^9.15.1",
     "googleapis": "^148.0.0",
@@ -34,14 +33,9 @@
     "ioredis": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.10.1",
-    "nodemon": "^3.1.9",
-    "prettier": "^3.5.3",
-    "prisma": "^6.7.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "rss-parser": "^3.13.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3",
     "uuid": "^11.1.0",
     "zod": "^3.24.4"
   },
@@ -53,7 +47,14 @@
     "@types/nodemailer": "^6.4.17",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "eslint": "^9.25.1",
     "globals": "^16.0.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3",
+    "prisma": "^6.7.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.0"
   }
 }
