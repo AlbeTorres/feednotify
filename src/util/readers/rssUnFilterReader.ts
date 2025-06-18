@@ -1,12 +1,13 @@
 import Parser from 'rss-parser';
-import { SourceFeedItem } from '../../interfaces';
+import { Source } from '../../Interfaces';
+
 
 // const { htmlToText } = require('html-to-text'); // eslint-disable-line @typescript-eslint/no-require-imports
 
 const parser = new Parser();
 
 export async function readRssUnfilteredFeeds(
-  feeds: SourceFeedItem[]
+  feeds: Source[]
   //   pubDateThreshold: Date
 ) {
   const rssFeeds = feeds.filter((feed) => feed.type === 'rss');

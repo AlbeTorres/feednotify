@@ -4,7 +4,7 @@ import { UpdateNewsletterSchemaType } from '../../validators/newsletter.schema';
 
 export async function updateNewsletterService({
   name,
-  newsletterId,
+  id,
   category,
   sources,
   userId,
@@ -12,7 +12,7 @@ export async function updateNewsletterService({
   try {
     const updatedNewsletter = await updateNewsletterRepository({
       name,
-      newsletterId,
+      newsletterId:id,
       category,
       sources,
       userId,

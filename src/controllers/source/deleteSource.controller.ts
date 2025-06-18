@@ -5,11 +5,11 @@ import * as z from 'zod';
 import { deleteSourceService } from '../../services/source/deleteSource.service';
 import { DeleteSourceSchema } from '../../validators/source.schema';
 export async function deleteSource(req: Request, res: Response) {
-  const { sourceId } = req.body;
+  const { id } = req.body;
   const userId = req.user?.id;
 
   const validatedFields = DeleteSourceSchema.safeParse({
-    sourceId,
+    id,
     userId,
   });
 
@@ -22,7 +22,7 @@ export async function deleteSource(req: Request, res: Response) {
   }
 
   try {
-    const response = await deleteSourceService({ sourceId, userId });
+    const response = await deleteSourceService({ id, userId });
 
     if (response.success) {
       res.status(200).json({ message: response.msg });

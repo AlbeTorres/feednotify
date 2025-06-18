@@ -3,7 +3,8 @@ import { NextFunction, Request, Response } from 'express';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config/jwt.config'; // Asegúrate de que la ruta sea correcta
-import { JwtPayload } from '../interfaces/jwtPayload.interface';
+import { JwtPayload } from '../Interfaces/jwtPayload.interface';
+
 
 export default function authMiddleware(
   req: Request,

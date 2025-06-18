@@ -22,7 +22,7 @@ export const CreateNewsletterSchema = z.object({
 });
 
 export const UpdateNewsletterSchema = z.object({
-  newsletterId: z.string().uuid(),
+  id: z.string().uuid(),
   name: z.string().min(3),
   category: z.string(),
   userId: z.string().uuid(),
@@ -30,7 +30,7 @@ export const UpdateNewsletterSchema = z.object({
 });
 
 export const DeleteNewsletterSchema = z.object({
-  newsletterId: z.string().uuid(),
+  id: z.string().uuid(),
   userId: z.string().uuid(),
 });
 
@@ -39,7 +39,7 @@ export const GetNewsletterByUserSchema = z.object({
 });
 
 export const GetNewsletterByIdSchema = z.object({
-  newsletterId: z.string().uuid(),
+  id: z.string().uuid(),
   userId: z.string().uuid(),
 });
 

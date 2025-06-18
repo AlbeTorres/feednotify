@@ -1,5 +1,5 @@
 export interface Source {
-  sourceId: string;
+  id: string;
   type: string;
   category?: string;
   name: string;

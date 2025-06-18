@@ -6,11 +6,11 @@ import { getSourceByIdService } from '../../services/source/getSourceById.servic
 import { GetSourceByIdSchema } from '../../validators/source.schema';
 
 export async function getSourceById(req: Request, res: Response) {
-  const { sourceId } = req.body;
+  const { id } = req.body;
   const userId = req.user?.id;
 
   const validatedFields = GetSourceByIdSchema.safeParse({
-    sourceId,
+    id,
     userId,
   });
 
@@ -23,7 +23,7 @@ export async function getSourceById(req: Request, res: Response) {
   }
 
   try {
-    const response = await getSourceByIdService({ sourceId, userId });
+    const response = await getSourceByIdService({ id, userId });
 
     if (response) {
       res.status(200).json(response);

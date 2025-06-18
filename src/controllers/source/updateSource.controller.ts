@@ -4,11 +4,11 @@ import * as z from 'zod';
 import { updateSourceService } from '../../services/source/updateSource.service';
 import { UpdateSourceSchema } from '../../validators/source.schema';
 export async function updateSource(req: Request, res: Response) {
-  const { sourceId, name, type, url } = req.body;
+  const { id, name, type, url } = req.body;
   const userId = req.user?.id;
 
   const validatedFields = UpdateSourceSchema.safeParse({
-    sourceId,
+    id,
     name,
     type,
     url,
@@ -25,7 +25,7 @@ export async function updateSource(req: Request, res: Response) {
 
   try {
     const updatedSource = await updateSourceService({
-      sourceId,
+      id,
       name,
       type,
       url,

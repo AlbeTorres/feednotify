@@ -3,12 +3,12 @@ import { getNewsletterByIdRepository } from '../../repository/newsletter/getNews
 import { GetNewsletterByIdSchemaType } from '../../validators/newsletter.schema';
 
 export async function getNewsletterByIdService({
-  newsletterId,
+  id,
   userId,
 }: GetNewsletterByIdSchemaType) {
   try {
     const response = await getNewsletterByIdRepository({
-      newsletterId,
+      newsletterId:id,
       userId,
     });
     if (!response) {

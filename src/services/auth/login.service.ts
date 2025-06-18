@@ -5,7 +5,7 @@ import jwt, { JsonWebTokenError, SignOptions } from 'jsonwebtoken';
 import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/jwt.config';
 import { sendTwoFactorTokenMail } from '../../email/senders/sendTwoFactorTokenMail';
 import { sendVerificationMail } from '../../email/senders/sendVerificationMail';
-import { JwtPayload } from '../../interfaces/jwtPayload.interface';
+
 
 import { getUserByEmailRepository } from '../../repository/auth/getUserByEmail.repository';
 import { deleteTwoFactorConfirmationTokenRepository } from '../../repository/token/deleteTwoFactorConfirmation.repository';
@@ -15,6 +15,7 @@ import { getTwoFactorTokenByEmail } from '../../repository/token/getTwoFactorTok
 import { LoginSchemaType } from '../../validators/auth.schema';
 import { generateTwoFactorToken } from '../token/generateTwoFactorToken.service';
 import { generateVerificationToken } from '../token/generateVerificationToken.service';
+import { JwtPayload } from '../../Interfaces/jwtPayload.interface';
 
 export async function loginService({
   email,

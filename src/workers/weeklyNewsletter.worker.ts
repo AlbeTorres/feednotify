@@ -1,7 +1,8 @@
 import { Job, Worker } from 'bullmq';
 import connection from '../config/redis';
-import { NewsletterJobData } from '../interfaces/newsletterJobData';
+
 import { weeklyNewsletterFromSourcesService } from '../services/newsletterDelivery/weeklyNewsletter.service';
+import { NewsletterJobData } from '../Interfaces/newsletterJobData';
 
 export const newsletterWorker = new Worker<NewsletterJobData>(
   'newsletter',

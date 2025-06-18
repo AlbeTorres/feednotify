@@ -22,7 +22,7 @@ export const CreateBulkSourceArraySchema = z.array(CreateBulkSourceSchema);
 
 export const UpdateSourceSchema = z
   .object({
-    sourceId: z.string().uuid(),
+    id: z.string().uuid(),
     name: z.string().min(3),
     type: z.string(),
     url: z.string().url(),
@@ -32,7 +32,7 @@ export const UpdateSourceSchema = z
 
 export const DeleteSourceSchema = z
   .object({
-    sourceId: z.string().uuid(),
+    id: z.string().uuid(),
     userId: z.string().uuid(),
   })
   .strict(); // This avoid sending invalid fields
@@ -45,7 +45,7 @@ export const GetSourcesByUserSchema = z
 
 export const GetSourceByIdSchema = z
   .object({
-    sourceId: z.string().uuid(),
+    id: z.string().uuid(),
     userId: z.string().uuid(),
   })
   .strict();

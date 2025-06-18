@@ -1,7 +1,10 @@
-import { Prisma } from '@prisma/client';
+
 import createError from 'http-errors';
+
+import { Source } from '../../Interfaces';
 import prisma from '../../config/prisma';
-import { Source } from '../../interfaces';
+import { Prisma } from '@prisma/client';
+
 
 type Props = {
   category: string;
@@ -22,7 +25,7 @@ export async function createNewsletterRepository({
         name,
         category,
         source: {
-          connect: sources.map((s) => ({ id: s.sourceId })),
+          connect: sources.map((s) => ({ id: s.id })),
         },
         userId,
       },

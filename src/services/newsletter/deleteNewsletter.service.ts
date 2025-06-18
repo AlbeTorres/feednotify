@@ -3,11 +3,11 @@ import { deleteNewsletterRepository } from '../../repository/newsletter/deleteNe
 import { DeleteNewsletterSchemaType } from '../../validators/newsletter.schema';
 
 export async function deleteNewsletterService({
-  newsletterId,
+  id,
   userId,
 }: DeleteNewsletterSchemaType) {
   try {
-    await deleteNewsletterRepository({ newsletterId, userId });
+    await deleteNewsletterRepository({ newsletterId:id, userId });
 
     return { success: true, msg: 'Newsletter deleted successfully!' };
   } catch (err: unknown) {
