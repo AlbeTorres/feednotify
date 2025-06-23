@@ -11,32 +11,32 @@ import { methodNotAllowed } from '../../util/methodHandler';
 const router = express.Router();
 
 router
-  .route('/create-source')
+  .route('/create')
   .post(createSource)
   .all(methodNotAllowed(['POST']));
 
 router
-  .route('/create-bulk-source')
+  .route('/create-bulk')
   .post(createBulkSource)
   .all(methodNotAllowed(['POST']));
 
 router
-  .route('/update-source')
+  .route('/update')
   .patch(updateSource)
   .all(methodNotAllowed(['PATCH']));
 
 router
-  .route('/get-source-by-id')
+  .route('/:id')
   .get(getSourceById)
   .all(methodNotAllowed(['GET']));
 
 router
-  .route('/get-sources-by-user')
+  .route('/')
   .get(getSourcesByUser)
   .all(methodNotAllowed(['GET']));
 
 router
-  .route('/delete-source')
+  .route('/delete')
   .delete(deleteSource)
   .all(methodNotAllowed(['DELETE']));
 

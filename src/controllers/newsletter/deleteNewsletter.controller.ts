@@ -2,14 +2,15 @@ import { Request, Response } from 'express';
 import createError from 'http-errors';
 import * as z from 'zod';
 
-import { getSourceByIdService } from '../../services/source/getSourceById.service';
-import { GetSourceByIdSchema } from '../../validators/source.schema';
+import { DeleteNewsletterSchema } from '../../validators/newsletter.schema';
+import { deleteNewsletterService } from '../../services/newsletter/deleteNewsletter.service';
 
-export async function getSourceById(req: Request, res: Response) {
-  const { id } = req.params;
+
+export async function deleteNewsletter(req: Request, res: Response) {
+  const { id } = req.body;
   const userId = req.user?.id;
 
-  const validatedFields = GetSourceByIdSchema.safeParse({
+  const validatedFields = DeleteNewsletterSchema.safeParse({
     id,
     userId,
   });
@@ -23,12 +24,12 @@ export async function getSourceById(req: Request, res: Response) {
   }
 
   try {
-    const response = await getSourceByIdService({ id, userId });
+    const response = await deleteNewsletterService({ id, userId });
 
-    if (response) {
-      res.status(200).json(response);
+    if (response.success) {
+      res.status(200).json({ message: response.msg });
     } else {
-      throw new createError.NotFound('Source not found');
+      throw new createError.InternalServerError('Error deleting newsletter');
     }
   } catch (err: unknown) {
     if (err instanceof createError.HttpError) {
@@ -41,9 +42,9 @@ export async function getSourceById(req: Request, res: Response) {
       );
     }
 
-    console.error('[Get Source By Id Error]', err);
+    console.error('[Delete newsletter Error]', err);
     throw new createError.InternalServerError(
-      'Unexpected error retrieving source: ' + (err as string)
+      'Unexpected error deleting newsletter: ' + (err as string)
     );
   }
 }

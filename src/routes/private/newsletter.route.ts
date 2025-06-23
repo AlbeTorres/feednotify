@@ -1,16 +1,36 @@
 import express from 'express';
-import { sendAINewsletter } from '../../controllers/newsletterDelivery/aiNewsletter.controller';
-import { cancelarScheduledNewsletter } from '../../controllers/newsletterDelivery/cancelScheduleNewsletter.controller';
-import { sendNewsletter } from '../../controllers/newsletterDelivery/newsletter.controller';
-import { weeklyNewsletter } from '../../controllers/newsletterDelivery/weeklyNewsletter.controller';
+import { createNewsletter } from '../../controllers/newsletter/createNewsletter.controller';
+import { methodNotAllowed } from '../../util/methodHandler';
+import { updateNewsletter } from '../../controllers/newsletter/updateNewsletter.controller';
+import { deleteNewsletter } from '../../controllers/newsletter/deleteNewsletter.controller';
+import { getNewsletterById } from '../../controllers/newsletter/getNewsletterById.controller';
+import { getNewsletterByUser } from '../../controllers/newsletter/getNewsletterByUser.controller';
 
 const router = express.Router();
 
-//obtener todos los updates desde una fecha de actualizacion especifica
-// /api/updates?since=2024-12-01
-router.get('/', sendNewsletter);
-router.get('/ai', sendAINewsletter);
-router.post('/schedule', weeklyNewsletter);
-router.post('/schedulecancel', cancelarScheduledNewsletter);
+router
+  .route('/create')
+  .post(createNewsletter)
+  .all(methodNotAllowed(['POST']));
+
+router
+  .route('/update')
+  .patch(updateNewsletter)
+  .all(methodNotAllowed(['PATCH']));
+
+router
+  .route('/delete')
+  .delete(deleteNewsletter)
+  .all(methodNotAllowed(['DELETE']));
+
+router
+  .route('/')
+  .get(getNewsletterByUser)
+  .all(methodNotAllowed(['GET']));
+
+router
+  .route('/:id')
+  .get(getNewsletterById)
+  .all(methodNotAllowed(['GET']));
 
 export default router;

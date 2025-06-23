@@ -5,7 +5,6 @@ import { getUpdatesByDate } from '../../services/update/getUpdates.service';
 import { email, feeds, name } from '../../util/data';
 
 export async function sendNewsletter(req: Request, res: Response) {
-  // Implementación de la función para enviar el boletín
   const lastWeek = new Date();
   lastWeek.setDate(lastWeek.getDate() - 7);
 
