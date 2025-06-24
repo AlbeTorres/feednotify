@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { UpdateSourceSchema } from './source.schema';
 export const WeeklyNewsletterSchema = z
   .object({
     day: z.enum([
@@ -18,7 +17,7 @@ export const CreateNewsletterSchema = z.object({
   userId: z.string().uuid(),
   name: z.string().min(3),
   category: z.string(),
-  sources: z.array(UpdateSourceSchema),
+  sources: z.array(z.string().uuid()),
 });
 
 export const UpdateNewsletterSchema = z.object({
@@ -26,7 +25,7 @@ export const UpdateNewsletterSchema = z.object({
   name: z.string().min(3),
   category: z.string(),
   userId: z.string().uuid(),
-  sources: z.array(UpdateSourceSchema),
+  sources: z.array(z.string().uuid()),
 });
 
 export const DeleteNewsletterSchema = z.object({

@@ -13,7 +13,7 @@ export async function getNewsletterByUserService({
     }
 
     return {
-      sources: response,
+      newsletters: response,
       success: true,
       msg: 'Newsletter retrieved successfully!',
     };

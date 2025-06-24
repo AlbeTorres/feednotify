@@ -2,7 +2,7 @@ import express from 'express';
 import { sendAINewsletter } from '../../controllers/newsletterDelivery/aiNewsletter.controller';
 import { cancelarScheduledNewsletter } from '../../controllers/newsletterDelivery/cancelScheduleNewsletter.controller';
 import { sendNewsletter } from '../../controllers/newsletterDelivery/newsletter.controller';
-import { weeklyNewsletter } from '../../controllers/newsletterDelivery/weeklyNewsletter.controller';
+import { weeklyScheduleNewsletter } from '../../controllers/newsletterDelivery/weeklyScheduleNewsletter.controller';
 import { methodNotAllowed } from '../../util/methodHandler';
 
 const router = express.Router();
@@ -19,7 +19,7 @@ router
 
 router
   .route('/schedule')
-  .post(weeklyNewsletter)
+  .post(weeklyScheduleNewsletter)
   .all(methodNotAllowed(['POST']));
 
 router

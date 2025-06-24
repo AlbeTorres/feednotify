@@ -14,6 +14,24 @@ export async function getNewsletterByIdRepository({
   try {
     const newsletter = await prisma.newsletter.findUnique({
       where: { id: newsletterId, userId },
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        userId: true,
+        category: true,
+        name: true,
+        source: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            url: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
     });
 
     return newsletter;

@@ -5,8 +5,8 @@ import { newsletterQueue } from '../../queues/newsletter.queue';
 import { cronExpression } from '../../util/cronExpression';
 import { WeeklyNewsletterSchema } from '../../validators/newsletter.schema';
 
-export async function weeklyNewsletter(req: Request, res: Response) {
-  const { day } = req.body;
+export async function weeklyScheduleNewsletter(req: Request, res: Response) {
+  const { day, newsletterId } = req.body;
 
   const validatedFields = WeeklyNewsletterSchema.safeParse({
     day,
@@ -31,6 +31,7 @@ export async function weeklyNewsletter(req: Request, res: Response) {
         userId,
         day,
         isInitialSend: false,
+        newsletterId: newsletterId, // Aquí deberías pasar el ID de la newsletter si es necesario
       },
       {
         repeat: {

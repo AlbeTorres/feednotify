@@ -1,14 +1,12 @@
 import { Prisma } from '@prisma/client';
 import createError from 'http-errors';
 import prisma from '../../config/prisma';
-import { Source } from '../../Interfaces';
-
 
 type Props = {
   newsletterId: string;
   category: string;
   name: string;
-  sources: Source[];
+  sources: string[];
   userId: string;
 };
 
@@ -26,9 +24,27 @@ export async function updateNewsletterRepository({
         name,
         category,
         source: {
-          connect: sources.map((s) => ({ id: s.id })),
+          connect: sources.map((s) => ({ id: s })),
         },
         userId,
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        userId: true,
+        category: true,
+        name: true,
+        source: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            url: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
       },
     });
 
