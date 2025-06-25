@@ -1,18 +1,16 @@
 import { Request, Response } from 'express';
-import { UpdateNewsletterSchema } from '../../validators/newsletter.schema';
+import { UpdateSourceNewsletterSchema } from '../../validators/newsletter.schema';
 import createError from 'http-errors';
 import * as z from 'zod';
-import { updateNewsletterService } from '../../services/newsletter/updateNewsletter.service';
+import { deleteSourcesNewsletterService } from '../../services/newsletter/deleteSourcesNewsletter.service';
 
-export async function updateNewsletter(req: Request, res: Response) {
-  const { id, name, category, sources } = req.body;
+export async function deleteSourcesNewsletter(req: Request, res: Response) {
+  const { id, sources } = req.body;
 
   const userId = req.user?.id;
 
-  const validateFields = UpdateNewsletterSchema.safeParse({
+  const validateFields = UpdateSourceNewsletterSchema.safeParse({
     id,
-    name,
-    category,
     sources,
     userId,
   });
@@ -26,20 +24,17 @@ export async function updateNewsletter(req: Request, res: Response) {
   }
 
   try {
-    const response = await updateNewsletterService({
+    const response = await deleteSourcesNewsletterService({
       id,
-      name,
-      category,
+      sources,
       userId,
     });
 
     if (response.success) {
-      res
-        .status(200)
-        .json({
-          message: response.msg,
-          newsletter: response.updatedNewsletter,
-        });
+      res.status(200).json({
+        message: response.msg,
+        newsletter: response.updatedNewsletter,
+      });
     } else {
       throw new createError.InternalServerError('Error updating newsletter');
     }

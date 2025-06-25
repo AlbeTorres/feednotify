@@ -1,18 +1,16 @@
 import createError from 'http-errors';
-import { updateNewsletterRepository } from '../../repository/newsletter/updateNewsletter.repository';
-import { UpdateNewsletterSchemaType } from '../../validators/newsletter.schema';
+import { UpdateSourceNewsletterSchemaType } from '../../validators/newsletter.schema';
+import { addSourcesNewsletterRepository } from '../../repository/newsletter/addSourcesNewsletter.repository';
 
-export async function updateNewsletterService({
-  name,
+export async function addSourcesNewsletterService({
   id,
-  category,
   userId,
-}: UpdateNewsletterSchemaType) {
+  sources,
+}: UpdateSourceNewsletterSchemaType) {
   try {
-    const updatedNewsletter = await updateNewsletterRepository({
-      name,
+    const updatedNewsletter = await addSourcesNewsletterRepository({
       newsletterId: id,
-      category,
+      sources,
       userId,
     });
 

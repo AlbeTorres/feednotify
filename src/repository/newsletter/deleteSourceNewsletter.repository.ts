@@ -1,27 +1,25 @@
 import { Prisma } from '@prisma/client';
-import createError from 'http-errors';
 import prisma from '../../config/prisma';
+import createError from 'http-errors';
 
 type Props = {
   newsletterId: string;
-  category: string;
-  name: string;
+  sources: string[];
   userId: string;
 };
 
-export async function updateNewsletterRepository({
+export async function deleteSourceNewsletterRepository({
   newsletterId,
+  sources,
   userId,
-  category,
-  name,
 }: Props) {
   try {
-    const newNewsletter = await prisma.newsletter.update({
+    const updatedNewsletter = await prisma.newsletter.update({
       where: { id: newsletterId, userId },
       data: {
-        name,
-        category,
-        userId,
+        source: {
+          disconnect: sources.map((s) => ({ id: s })),
+        },
       },
       select: {
         id: true,
@@ -43,10 +41,12 @@ export async function updateNewsletterRepository({
       },
     });
 
-    return newNewsletter;
+    return updatedNewsletter;
   } catch (err: unknown) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      throw new createError.InternalServerError('Error updating Newsletter');
+      throw new createError.InternalServerError(
+        'Error deleting source from Newsletter'
+      );
     }
     throw new createError.InternalServerError(err as string);
   }

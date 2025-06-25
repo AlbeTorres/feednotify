@@ -5,6 +5,7 @@ import { updateNewsletter } from '../../controllers/newsletter/updateNewsletter.
 import { deleteNewsletter } from '../../controllers/newsletter/deleteNewsletter.controller';
 import { getNewsletterById } from '../../controllers/newsletter/getNewsletterById.controller';
 import { getNewsletterByUser } from '../../controllers/newsletter/getNewsletterByUser.controller';
+import { addSourceNewsletter } from '../../controllers/newsletter/addSourcesNewsletter.controller';
 
 const router = express.Router();
 
@@ -32,5 +33,15 @@ router
   .route('/:id')
   .get(getNewsletterById)
   .all(methodNotAllowed(['GET']));
+
+router
+  .route('/:id/source')
+  .post(addSourceNewsletter)
+  .all(methodNotAllowed(['POST']));
+
+router
+  .route('/:id/source')
+  .delete(addSourceNewsletter)
+  .all(methodNotAllowed(['DELETE']));
 
 export default router;
