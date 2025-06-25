@@ -6,10 +6,13 @@ import { cronExpression } from '../../util/cronExpression';
 import { WeeklyNewsletterSchema } from '../../validators/newsletter.schema';
 
 export async function weeklyScheduleNewsletter(req: Request, res: Response) {
-  const { day, newsletterId } = req.body;
+  const { weekday, hour, minute, newsletterId } = req.body;
 
   const validatedFields = WeeklyNewsletterSchema.safeParse({
-    day,
+    weekday,
+    newsletterId,
+    hour,
+    minute,
   });
 
   if (!validatedFields.success) {
@@ -23,13 +26,13 @@ export async function weeklyScheduleNewsletter(req: Request, res: Response) {
   }
 
   try {
-    const recurringDay = cronExpression(day); // Cada [día] a las 00:00
+    const recurringDay = cronExpression(minute, hour, weekday);
 
     const recurringJob = await newsletterQueue.add(
       `recurring-${userId}`,
       {
         userId,
-        day,
+        weekday,
         isInitialSend: false,
         newsletterId: newsletterId, // Aquí deberías pasar el ID de la newsletter si es necesario
       },
@@ -49,7 +52,7 @@ export async function weeklyScheduleNewsletter(req: Request, res: Response) {
     const response = {
       success: true,
       recurringJobId: recurringJob.id,
-      message: `Newsletter configured: weekly on ${day}s`,
+      message: `Newsletter configured: weekly on ${weekday}s`,
     };
 
     res.json(response);

@@ -34,7 +34,7 @@ export const generateApiKeyRepository = async ({
     };
   } catch (err: unknown) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      throw new createError.InternalServerError('Error de base de datos');
+      throw new createError.InternalServerError('Database error occurred');
     }
     console.error('Error generating Apikey:', err);
     throw new createError.InternalServerError(err as string);

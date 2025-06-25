@@ -7,12 +7,12 @@ import { NewsletterJobData } from '../Interfaces/newsletterJobData';
 export const newsletterWorker = new Worker<NewsletterJobData>(
   'newsletter',
   async (job: Job<NewsletterJobData>) => {
-    const { userId, day, isInitialSend, newsletterId } = job.data;
+    const { userId, weekday, isInitialSend, newsletterId } = job.data;
 
     console.log(
       `📧 Processing newsletter for user ${userId} (${isInitialSend ? 'immediate' : 'scheduled'})`
     );
-    console.log(`${day} `);
+    console.log(`${weekday} `);
 
     try {
       // Optener la info del user por su id

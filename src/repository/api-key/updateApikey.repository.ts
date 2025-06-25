@@ -25,7 +25,7 @@ export async function updateApiKeyRepository({
     return user;
   } catch (err: unknown) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      throw new createError.InternalServerError('Error de base de datos');
+      throw new createError.InternalServerError('Database error occurred');
     }
     console.error('Error fetching user:', err);
     throw new createError.InternalServerError(err as string);

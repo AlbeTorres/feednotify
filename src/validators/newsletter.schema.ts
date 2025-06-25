@@ -1,7 +1,7 @@
 import { z } from 'zod';
 export const WeeklyNewsletterSchema = z
   .object({
-    day: z.enum([
+    weekday: z.enum([
       'Sunday',
       'Monday',
       'Tuesday',
@@ -10,6 +10,9 @@ export const WeeklyNewsletterSchema = z
       'Friday',
       'Saturday',
     ]),
+    newsletterId: z.string().uuid(),
+    hour: z.number().min(0).max(23).optional(),
+    minute: z.number().min(0).max(59).optional(),
   })
   .strict();
 
