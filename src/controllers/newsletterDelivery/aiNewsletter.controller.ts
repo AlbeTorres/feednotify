@@ -1,30 +1,53 @@
 import { Request, Response } from 'express';
 import createError from 'http-errors';
 
-import { sendNewsLetterAIMail } from '../../email/senders/sendNewsLetterAiMail';
-import { createAiNewsletterFromSources } from '../../services/newsletterDelivery/createAINewsletter.service';
-import { email, name } from '../../util/data';
+import { sendAiNewsletterService } from '../../services/newsletterDelivery/sendAINewsletter.service';
+
+import { NewsletterSchema } from '../../validators/newsletter.schema';
+import z from 'zod';
 
 export async function sendAINewsletter(req: Request, res: Response) {
-  // Implementación de la función para enviar el boletín
+  const { newsletterId } = req.body;
+  const userId = req.user?.id;
+
+  const validatedFields = NewsletterSchema.safeParse({
+    newsletterId,
+    userId,
+  });
+
+  if (!validatedFields.success) {
+    throw new createError.BadRequest('Invalid Input data');
+  }
+
+  if (!userId) {
+    throw new createError.Unauthorized('User ID is required');
+  }
+
   const lastWeek = new Date();
   lastWeek.setDate(lastWeek.getDate() - 7);
 
-  const userId = req.user?.id;
+  try {
+    const response = await sendAiNewsletterService(
+      userId,
+      lastWeek,
+      newsletterId
+    );
 
-   if (!userId) {
-      throw new createError.Unauthorized('User ID is required');
+    res.status(200).json(response);
+  } catch (err: unknown) {
+    if (err instanceof createError.HttpError) {
+      throw err;
     }
 
-  try {
-    const feedUpdates = await createAiNewsletterFromSources(userId,lastWeek);
+    if (err instanceof z.ZodError) {
+      throw new createError.BadRequest(
+        'Internal valiadation error: ' + err.message
+      );
+    }
 
-    await sendNewsLetterAIMail(email, feedUpdates, name);
-    console.log('Enviando boletín...');
-
-    res.json('Boletín enviado con éxito');
-  } catch (error) {
-    console.error('Error obteniendo actualizaciones:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    console.error('[AINewsletter Error]', err);
+    throw new createError.InternalServerError(
+      'Unespected error sending the Ai newsletter: ' + (err as string)
+    );
   }
 }

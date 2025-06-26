@@ -16,6 +16,13 @@ export const WeeklyNewsletterSchema = z
   })
   .strict();
 
+export const NewsletterSchema = z
+  .object({
+    newsletterId: z.string().uuid(),
+    userId: z.string().uuid(),
+  })
+  .strict();
+
 export const CreateNewsletterSchema = z.object({
   userId: z.string().uuid(),
   name: z.string().min(3),

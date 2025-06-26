@@ -1,26 +1,52 @@
 import { Request, Response } from 'express';
-import { sendNewsLetterMail } from '../../email/templates/sendFeedNewsletter';
 
-import { getUpdatesByDate } from '../../services/update/getUpdates.service';
-import { email, feeds, name } from '../../util/data';
+import { NewsletterSchema } from '../../validators/newsletter.schema';
+import createError from 'http-errors';
+import { sendNewsletterService } from '../../services/newsletterDelivery/sendNewsletter.service';
+import z from 'zod';
 
 export async function sendNewsletter(req: Request, res: Response) {
+  const { newsletterId } = req.body;
+  const userId = req.user?.id;
+
+  const validatedFields = NewsletterSchema.safeParse({
+    newsletterId,
+    userId,
+  });
+
+  if (!validatedFields.success) {
+    throw new createError.BadRequest('Invalid Input data');
+  }
+
+  if (!userId) {
+    throw new createError.Unauthorized('User ID is required');
+  }
+
   const lastWeek = new Date();
   lastWeek.setDate(lastWeek.getDate() - 7);
 
   try {
-    const feedUpdates = await getUpdatesByDate(feeds, lastWeek);
-
-    await sendNewsLetterMail(
-      email,
-      { rss: feedUpdates.rssFeed, youtube: feedUpdates.youtubeFeed },
-      name
+    const response = await sendNewsletterService(
+      userId,
+      newsletterId,
+      lastWeek
     );
-    console.log('Enviando boletín...');
 
-    res.json('Boletín enviado con éxito');
-  } catch (error) {
-    console.error('Error obteniendo actualizaciones:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    res.status(200).json(response);
+  } catch (err: unknown) {
+    if (err instanceof createError.HttpError) {
+      throw err;
+    }
+
+    if (err instanceof z.ZodError) {
+      throw new createError.BadRequest(
+        'Internal valiadation error: ' + err.message
+      );
+    }
+
+    console.error('[Newsletter Error]', err);
+    throw new createError.InternalServerError(
+      'Unespected error sending the newsletter: ' + (err as string)
+    );
   }
 }

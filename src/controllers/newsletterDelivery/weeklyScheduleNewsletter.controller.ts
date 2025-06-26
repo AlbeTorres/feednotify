@@ -34,13 +34,13 @@ export async function weeklyScheduleNewsletter(req: Request, res: Response) {
         userId,
         weekday,
         isInitialSend: false,
-        newsletterId: newsletterId, // Aquí deberías pasar el ID de la newsletter si es necesario
+        newsletterId: newsletterId,
       },
       {
         repeat: {
           pattern: recurringDay,
         },
-        jobId: `newsletter-recurring-${userId}`, // ID único para poder cancelar
+        jobId: `newsletter-recurring-${userId}`,
         attempts: 5,
         backoff: {
           type: 'exponential',
