@@ -23,6 +23,7 @@ export async function sendAiNewsletterService(
       newsletterId,
       userId,
     });
+
     if (!newsletter || newsletter.source.length === 0) {
       throw new createError.NotFound('No newsletter found for this user');
     }

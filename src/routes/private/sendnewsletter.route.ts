@@ -8,11 +8,6 @@ import { methodNotAllowed } from '../../util/methodHandler';
 const router = express.Router();
 
 router
-  .route('/')
-  .get(sendNewsletter)
-  .all(methodNotAllowed(['GET']));
-
-router
   .route('/ai')
   .get(sendAINewsletter)
   .all(methodNotAllowed(['GET']));
@@ -26,5 +21,10 @@ router
   .route('/schedulecancel')
   .post(cancelarScheduledNewsletter)
   .all(methodNotAllowed(['POST']));
+
+router
+  .route('/')
+  .get(sendNewsletter)
+  .all(methodNotAllowed(['GET']));
 
 export default router;

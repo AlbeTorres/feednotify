@@ -7,11 +7,11 @@ import { NewsletterSchema } from '../../validators/newsletter.schema';
 import z from 'zod';
 
 export async function sendAINewsletter(req: Request, res: Response) {
-  const { newsletterId } = req.body;
+  const { id } = req.body;
   const userId = req.user?.id;
 
   const validatedFields = NewsletterSchema.safeParse({
-    newsletterId,
+    id,
     userId,
   });
 
@@ -27,11 +27,7 @@ export async function sendAINewsletter(req: Request, res: Response) {
   lastWeek.setDate(lastWeek.getDate() - 7);
 
   try {
-    const response = await sendAiNewsletterService(
-      userId,
-      lastWeek,
-      newsletterId
-    );
+    const response = await sendAiNewsletterService(userId, lastWeek, id);
 
     res.status(200).json(response);
   } catch (err: unknown) {

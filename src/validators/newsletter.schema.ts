@@ -10,7 +10,7 @@ export const WeeklyNewsletterSchema = z
       'Friday',
       'Saturday',
     ]),
-    newsletterId: z.string().uuid(),
+    id: z.string().uuid(),
     hour: z.number().min(0).max(23).optional(),
     minute: z.number().min(0).max(59).optional(),
   })
@@ -18,7 +18,7 @@ export const WeeklyNewsletterSchema = z
 
 export const NewsletterSchema = z
   .object({
-    newsletterId: z.string().uuid(),
+    id: z.string().uuid(),
     userId: z.string().uuid(),
   })
   .strict();
