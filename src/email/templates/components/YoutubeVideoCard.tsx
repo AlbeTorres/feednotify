@@ -1,5 +1,6 @@
-import { YoutubeVideo } from '../../interfaces';
-import { formatDate } from '../../util/formatDate';
+import { YoutubeVideo } from "../../../Interfaces";
+import { formatDate } from "../../../util/formatDate";
+
 
 export const YoutubeVideoCard = ({
   link,

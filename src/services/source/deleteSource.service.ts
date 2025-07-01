@@ -3,11 +3,11 @@ import { deleteSourceRepository } from '../../repository/source/deleteSource.rep
 import { DeleteSourceSchemaType } from '../../validators/source.schema';
 
 export async function deleteSourceService({
-  sourceId,
+  id,
   userId,
 }: DeleteSourceSchemaType) {
   try {
-    await deleteSourceRepository({ sourceId, userId });
+    await deleteSourceRepository({ sourceId:id, userId });
 
     return { success: true, msg: 'Source deleted successfully!' };
   } catch (err: unknown) {

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import createError from 'http-errors';
 import * as z from 'zod';
-import { cancelUserNewsletter } from '../../services/newsletter/cancelScheduledNewsletterByUser.service';
+import { cancelUserNewsletter } from '../../services/newsletterDelivery/cancelScheduledNewsletterByUser.service';
 
 export async function cancelarScheduledNewsletter(req: Request, res: Response) {
   const userId = req.user?.id;

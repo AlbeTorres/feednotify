@@ -1,4 +1,4 @@
-import { createMailTransporter } from './createMail.transporter';
+import { createMailTransporter } from '../createMail.transporter';
 
 export const sendResetMail = (email: string, token: string, name: string) => {
   const transporter = createMailTransporter();

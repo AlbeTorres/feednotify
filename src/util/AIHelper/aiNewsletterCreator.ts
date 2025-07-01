@@ -1,6 +1,7 @@
 import { createUserContent, GoogleGenAI } from '@google/genai';
-import { feedResponse } from '../../interfaces/FeedResponse';
+
 import { AiNewsLetterCreatorPrompt } from '../AiPromps/aiNewsletterCreatorPromp';
+import { feedResponse } from '../../Interfaces/FeedResponse';
 require('dotenv').config(); // eslint-disable-line @typescript-eslint/no-require-imports
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEMINI_API_KEY });
@@ -16,7 +17,7 @@ export async function getAiNewsLetterCreator(content: feedResponse) {
       ]),
     ],
     config: {
-      responseMimeType: 'application/json',
+      // responseMimeType: 'application/json',
       //   responseSchema: {
       //     type: Type.ARRAY,
       //     items: {

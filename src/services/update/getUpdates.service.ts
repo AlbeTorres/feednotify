@@ -1,9 +1,10 @@
-import { SourceFeedItem } from '../../interfaces';
+
+import { Source } from '../../Interfaces';
 import { readRssFeeds } from '../../util/readers/rssreader';
 import { readYoutubeFeeds } from '../../util/readers/youtubeReader';
 
 export async function getUpdatesByDate(
-  sourcefeed: SourceFeedItem[],
+  sourcefeed: Source[],
   date: Date
 ) {
   const rssFeed = await readRssFeeds(sourcefeed, date);

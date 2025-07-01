@@ -33,6 +33,8 @@ model User {
   apiKey ApiKey[]
 
   Source Source[]
+
+  Newsletter Newsletter[]
 }
 
 model Account {
@@ -113,6 +115,20 @@ model Source {
   url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  Newsletter Newsletter[]
+}
+
+model Newsletter {
+  id        String   @id @default(uuid())
+  name      String
+  category  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  source    Source[]
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

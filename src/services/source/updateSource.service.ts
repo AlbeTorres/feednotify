@@ -3,14 +3,14 @@ import { updateSourceRepository } from '../../repository/source/updateSource.rep
 import { UpdateSourceSchemaType } from '../../validators/source.schema';
 export async function updateSourceService({
   name,
-  sourceId,
+  id,
   type,
   url,
   userId,
 }: UpdateSourceSchemaType) {
   try {
     const updatedSource = await updateSourceRepository({
-      sourceId,
+      sourceId:id,
       type,
       name,
       url,

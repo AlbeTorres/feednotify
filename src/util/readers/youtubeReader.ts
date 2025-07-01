@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { google } from 'googleapis';
-import { SourceFeedItem, YoutubeVideo } from '../../interfaces';
+import { Source, YoutubeVideo } from '../../Interfaces';
+
 
 require('dotenv').config(); // eslint-disable-line @typescript-eslint/no-require-imports
 
@@ -10,7 +11,7 @@ const youtube = google.youtube({
 });
 
 export async function readYoutubeFeeds(
-  feeds: SourceFeedItem[],
+  feeds: Source[],
   pubDateThreshold: Date
 ) {
   const youtubeFeeds = feeds.filter((feed) => feed.type === 'youtube');

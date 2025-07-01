@@ -10,6 +10,10 @@ const WEEKDAYS = {
 
 export type Weekday = keyof typeof WEEKDAYS;
 
-export function cronExpression(day: Weekday = 'Monday') {
-  return `0 0 * * ${WEEKDAYS[day]}`; // Cron expression for 00:00 on the specified weekday
+export function cronExpression(
+  minute: number = 0,
+  hour: number = 0,
+  day: Weekday = 'Monday'
+) {
+  return `${minute} ${hour} * * ${WEEKDAYS[day]}`; // Cron expression for 00:00 on the specified weekday
 }

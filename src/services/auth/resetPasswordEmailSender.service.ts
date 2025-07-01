@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import { sendResetMail } from '../../email/sendResetPasswordMail';
+import { sendResetMail } from '../../email/senders/sendResetPasswordMail';
 import { ResetPasswordEmailSenderSchemaType } from '../../validators/auth.schema';
 import { generateResetToken } from '../token/generateResetToken.service';
 

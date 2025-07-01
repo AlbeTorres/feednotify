@@ -3,11 +3,11 @@ import { getSourceByIdRepository } from '../../repository/source/getSourceById.r
 import { GetSourceByIdSchemaType } from '../../validators/source.schema';
 
 export async function getSourceByIdService({
-  sourceId,
+  id,
   userId,
 }: GetSourceByIdSchemaType) {
   try {
-    const response = await getSourceByIdRepository({ sourceId, userId });
+    const response = await getSourceByIdRepository({ sourceId:id, userId });
     if (!response) {
       throw new createError.NotFound('Source not found');
     }

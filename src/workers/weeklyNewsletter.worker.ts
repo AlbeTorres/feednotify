@@ -1,17 +1,18 @@
 import { Job, Worker } from 'bullmq';
 import connection from '../config/redis';
-import { NewsletterJobData } from '../interfaces/newsletterJobData';
-import { weeklyNewsletterFromSourcesService } from '../services/newsletter/weeklyNewsletter.service';
+
+import { sendNewsletterService } from '../services/newsletterDelivery/sendNewsletter.service';
+import { NewsletterJobData } from '../Interfaces/newsletterJobData';
 
 export const newsletterWorker = new Worker<NewsletterJobData>(
   'newsletter',
   async (job: Job<NewsletterJobData>) => {
-    const { userId, day, isInitialSend } = job.data;
+    const { userId, weekday, isInitialSend, newsletterId } = job.data;
 
     console.log(
       `📧 Processing newsletter for user ${userId} (${isInitialSend ? 'immediate' : 'scheduled'})`
     );
-    console.log(`${day} `);
+    console.log(`${weekday} `);
 
     try {
       // Optener la info del user por su id
@@ -25,7 +26,7 @@ export const newsletterWorker = new Worker<NewsletterJobData>(
       // Restar 7 días para obtener la fecha de hace una semana
       lastWeek.setDate(lastWeek.getDate() - 7);
 
-      await weeklyNewsletterFromSourcesService(userId, lastWeek);
+      await sendNewsletterService(userId, newsletterId, lastWeek);
 
       console.log(`✅ Newsletter sent successfully to userEmail`);
 

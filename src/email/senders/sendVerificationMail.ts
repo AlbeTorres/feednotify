@@ -1,4 +1,4 @@
-import { createMailTransporter } from './createMail.transporter';
+import { createMailTransporter } from '../createMail.transporter';
 
 export const sendVerificationMail = (
   email: string,

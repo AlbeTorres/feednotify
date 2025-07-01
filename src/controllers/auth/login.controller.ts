@@ -5,8 +5,6 @@ import { loginService } from '../../services/auth/login.service';
 import { LoginSchema } from '../../validators/auth.schema';
 
 export async function login(req: Request, res: Response) {
-  console.log('Login controller');
-  console.log('req.body', req.body);
   const { email, password, code } = req.body;
 
   const validatedFields = LoginSchema.safeParse({ email, password, code });
@@ -17,7 +15,6 @@ export async function login(req: Request, res: Response) {
 
   try {
     const response = await loginService({ email, password, code });
-    console.log('response', response);
 
     switch (response.state) {
       case 'unverificated_email':

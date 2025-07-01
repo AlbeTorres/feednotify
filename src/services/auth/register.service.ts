@@ -1,6 +1,6 @@
 import bcryptjs from 'bcryptjs';
 import createError from 'http-errors';
-import { sendVerificationMail } from '../../email/sendVerificationMail';
+import { sendVerificationMail } from '../../email/senders/sendVerificationMail';
 import { createUserRepository } from '../../repository/auth/createUser.repository';
 import { getUserByEmailRepository } from '../../repository/auth/getUserByEmail.repository';
 import { RegisterSchemaType } from '../../validators/auth.schema';

@@ -1,7 +1,8 @@
 import { render } from '@react-email/render';
-import { RssFeed, YoutubeFeed } from '../interfaces';
-import { createMailTransporter } from './createMail.transporter';
+
+import { createMailTransporter } from '../createMail.transporter';
 import NewsletterTemplate from './NewsLetterTemplate';
+import { RssFeed, YoutubeFeed } from '../../Interfaces';
 
 export const sendNewsLetterMail = async (
   email: string,

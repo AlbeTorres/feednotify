@@ -1,5 +1,6 @@
-import { RssFeed } from '../../interfaces';
 
+
+import { RssFeed } from '../../../Interfaces';
 import { Article } from './Article';
 export const SimpleFeed = ({ id, image, name, posts }: RssFeed) => {
   return (
