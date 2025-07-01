@@ -6,11 +6,11 @@ import { sendNewsletterService } from '../../services/newsletterDelivery/sendNew
 import z from 'zod';
 
 export async function sendNewsletter(req: Request, res: Response) {
-  const { newsletterId } = req.body;
+  const { id } = req.body;
   const userId = req.user?.id;
 
   const validatedFields = NewsletterSchema.safeParse({
-    newsletterId,
+    id,
     userId,
   });
 
@@ -26,11 +26,7 @@ export async function sendNewsletter(req: Request, res: Response) {
   lastWeek.setDate(lastWeek.getDate() - 7);
 
   try {
-    const response = await sendNewsletterService(
-      userId,
-      newsletterId,
-      lastWeek
-    );
+    const response = await sendNewsletterService(userId, id, lastWeek);
 
     res.status(200).json(response);
   } catch (err: unknown) {

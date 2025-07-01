@@ -6,11 +6,11 @@ import { cronExpression } from '../../util/cronExpression';
 import { WeeklyNewsletterSchema } from '../../validators/newsletter.schema';
 
 export async function weeklyScheduleNewsletter(req: Request, res: Response) {
-  const { weekday, hour, minute, newsletterId } = req.body;
+  const { weekday, hour, minute, id } = req.body;
 
   const validatedFields = WeeklyNewsletterSchema.safeParse({
     weekday,
-    newsletterId,
+    id,
     hour,
     minute,
   });
@@ -34,7 +34,7 @@ export async function weeklyScheduleNewsletter(req: Request, res: Response) {
         userId,
         weekday,
         isInitialSend: false,
-        newsletterId: newsletterId,
+        newsletterId: id,
       },
       {
         repeat: {
