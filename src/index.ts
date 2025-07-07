@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import errorHandler from './middleware/errorHandler.middleware';
 import routes from './routes';
+import swaggerDocument from './documentation/swaggerDocument';
 
 import './workers/weeklyNewsletter.worker';
 
@@ -15,10 +16,11 @@ app.use(cors());
 app.use(express.json());
 //Habilitar Express.urlencoded
 app.use(express.urlencoded({ extended: true }));
+//Api Documentation
+app.use('/api-docs', swaggerDocument);
 
 //rutas
 app.use('/api', routes);
-app.use('/health', routes);
 
 // ===== HEALTH CHECK =====
 app.get('/health', (req, res) => {
@@ -35,7 +37,7 @@ app.use((req, res) => {
   res.status(404).json({
     status: 'error',
     message: `Ruta ${req.method} ${req.originalUrl} no encontrada`,
-    availableRoutes: ['GET /health', 'POST /api/source/create-source'],
+    availableRoutes: ['GET /health', 'GET /api-docs'],
   });
 });
 

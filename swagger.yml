@@ -1,0 +1,306 @@
+openapi: 3.0.4
+info:
+  title: FeedNotify API
+  description: |-
+    This is an API for FeedNotify, a service that allows users to subscribe to various feeds and receive weekly newsletters about updates.
+  termsOfService: 'legal.com'
+  contact:
+    email: albertocorreoficial@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: '1.0'
+servers:
+  - url: coming soon
+tags:
+  - name: user
+    description: Authentication and user management
+  - name: source
+    description: Operations related to sources
+  - name: newsletter
+    description: Operations related to newsletters
+  - name: sendNewsletter
+    description: Operations related to sending newsletters
+paths:
+  /source:
+    post:
+      tags:
+        - source
+      summary: Add a new source to the user's sources.
+      description: Add a new source.
+      operationId: addSource
+      requestBody:
+        description: Create a new source
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSource'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Source'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+
+    get:
+      tags:
+        - source
+      summary: Fetch sources by user.
+      description: Fetch sources by user.
+      operationId: getSourcesByUser
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Source'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Source'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+  /source/{id}:
+    patch:
+      tags:
+        - source
+      summary: Update an existing source.
+      description: Update an existing source by Id.
+      operationId: updateSource
+      parameters:
+        - name: id
+          in: path
+          description: The id of the source that needs to be deleted
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Update an existent source previously added by the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSource'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Source'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Source not found
+        '422':
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+    delete:
+      tags:
+        - source
+      summary: Delete a source by id.
+      description: This can only be done by the logged in user.
+      operationId: deleteSource
+      parameters:
+        - name: id
+          in: path
+          description: The id of the source that needs to be deleted
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Source deleted
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: Source not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+    get:
+      tags:
+        - source
+      summary: Get a source by id.
+      description: This can only be done by the logged in user.
+      operationId: getSourceById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the source that needs to be fetched
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Source fetched successfully
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: Source not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+  /source/create-bulk:
+    post:
+      tags:
+        - source
+      summary: Add a list of new sources to the user's sources.
+      description: Add a list new sources.
+      operationId: addBulkSource
+      requestBody:
+        description: Create new sources
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/NewSource'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Source'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+components:
+  schemas:
+    BaseSource:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+          format: uri
+        type:
+          type: string
+          enum: [rss, youtube]
+          description: type of the source is a string that can be either 'rss' or 'youtube'
+
+    NewSource:
+      allOf:
+        - $ref: '#/components/schemas/BaseSource'
+        - type: object
+      required:
+        - name
+        - url
+        - type
+
+    Source:
+      allOf:
+        - $ref: '#/components/schemas/BaseSource'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            userId:
+              type: string
+              format: uuid
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [error]
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+    oauth2Auth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://yourdomain.com/oauth/authorize
+          tokenUrl: https://yourdomain.com/oauth/token
+          scopes:
+            read: Read access
+            write: Write access

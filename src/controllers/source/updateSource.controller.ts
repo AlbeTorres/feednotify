@@ -4,9 +4,9 @@ import * as z from 'zod';
 import { updateSourceService } from '../../services/source/updateSource.service';
 import { UpdateSourceSchema } from '../../validators/source.schema';
 
-
 export async function updateSource(req: Request, res: Response) {
-  const { id, name, type, url } = req.body;
+  const { id } = req.params;
+  const { name, type, url } = req.body;
   const userId = req.user?.id;
 
   const validatedFields = UpdateSourceSchema.safeParse({
