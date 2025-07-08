@@ -45,7 +45,7 @@ export async function registerService({
     return {
       success: true,
       msg: 'User registered successfully',
-      user,
+      data: user,
       status: 'Confirmation email sent',
     };
   } catch (err: unknown) {

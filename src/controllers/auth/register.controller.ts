@@ -14,35 +14,28 @@ export async function register(req: Request, res: Response) {
   });
 
   if (!validatedFields.success) {
-    throw new createError.BadRequest('Datos de entrada inválidos'); // Error genérico por seguridad
+    throw new createError.BadRequest('Inavlid input data'); // Error genérico por seguridad
   }
 
   try {
     const response = await registerService({ name, email, password, role });
 
     if (response.success) {
-      res.status(200).json({ message: response.msg });
+      res.status(200).json(response);
     } else {
-      throw new createError.InternalServerError(
-        'Error al registrar el usuario'
-      );
+      throw new createError.InternalServerError('Error registering user');
     }
   } catch (err: unknown) {
-    // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {
-      // Ya viene con status y mensaje adecuados
       throw err;
     }
     if (err instanceof z.ZodError) {
-      // Nunca debería llegar aquí porque lo validamos antes, pero…
-      throw new createError.BadRequest('Error de validación interno');
+      throw new createError.BadRequest('Internal validation error');
     }
 
-    // —— Falla desconocida ——
-    // Log interno útil para debugging (evitar mostrarlo al usuario)
     console.error('[Register Error]', err);
     throw new createError.InternalServerError(
-      'Error inesperado al iniciar sesión'
+      'An unexpected error occurred while registering the user.'
     );
   }
 }

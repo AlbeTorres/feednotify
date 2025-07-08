@@ -13,8 +13,10 @@ info:
 servers:
   - url: coming soon
 tags:
+  - name: auth
+    description: Authentication
   - name: user
-    description: Authentication and user management
+    description: User management
   - name: source
     description: Operations related to sources
   - name: newsletter
@@ -22,6 +24,51 @@ tags:
   - name: sendNewsletter
     description: Operations related to sending newsletters
 paths:
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Register a new user.
+      description: Register a new user.
+      operationId: register
+      requestBody:
+        description: Register a new user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRegister'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AuthUser'
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AuthUser'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /source:
     post:
       tags:
@@ -234,6 +281,59 @@ paths:
         - jwtAuth: []
 components:
   schemas:
+    AuthUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+          nullable: true
+        name:
+          type: string
+          nullable: true
+      required:
+        - id
+
+    AuthLogin:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code for two-factor authentication, if required
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - email
+        - passwor
+
+    AuthRegister:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+          description: Name of the user
+        role:
+          type: string
+          enum: [user, admin]
+          description: Role of the user, can be either 'user' or 'admin'
+      required:
+        - email
+        - password
+        - name
+
     BaseSource:
       type: object
       properties:
@@ -273,6 +373,14 @@ components:
             updatedAt:
               type: string
               format: date-time
+    BaseResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+
     Error:
       type: object
       properties:
