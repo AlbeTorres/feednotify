@@ -29,7 +29,11 @@ export async function createSource(req: Request, res: Response) {
     if (response.success) {
       res
         .status(201)
-        .json({ message: response.msg, source: response.newSource });
+        .json({
+          success: true,
+          message: response.msg,
+          data: response.newSource,
+        });
     } else {
       throw new createError.InternalServerError('Error creating source');
     }

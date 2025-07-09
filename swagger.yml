@@ -103,6 +103,9 @@ paths:
                   - $ref: '#/components/schemas/BaseResponse'
                     type: object
                 properties:
+                  token:
+                    type: string
+                    format: jwt
                   data:
                     $ref: '#/components/schemas/AuthUser'
         '202':
@@ -288,10 +291,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Source'
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Source'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Source'
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Source'
         '400':
           description: Invalid input
         '422':
@@ -317,9 +330,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Source'
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Source'
             application/xml:
               schema:
                 type: array
@@ -364,7 +382,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Source'
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Source'
             application/xml:
               schema:
                 $ref: '#/components/schemas/Source'
@@ -399,6 +422,17 @@ paths:
       responses:
         '200':
           description: Source deleted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
         '400':
           description: Invalid username supplied
         '404':
@@ -428,6 +462,23 @@ paths:
       responses:
         '200':
           description: Source fetched successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Source'
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Source'
         '400':
           description: Invalid username supplied
         '404':
@@ -462,14 +513,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Source'
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Source'
             application/xml:
               schema:
                 $ref: '#/components/schemas/Source'
-        '400':
-          description: Invalid input
-        '422':
-          description: Validation exception
         default:
           description: Unexpected error
           content:
@@ -479,6 +533,286 @@ paths:
       security:
         - jwtAuth: []
 
+  /newsletter:
+    post:
+      tags:
+        - newsletter
+      summary: Create a new newsletter.
+      description: Create a new newsletter.
+      operationId: createNewsletter
+      requestBody:
+        description: Create a new newsletter.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewNewsletter'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Newsletter'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+    get:
+      tags:
+        - newsletter
+      summary: Get all the user's newsletters.
+      description: Get all the user's newsletters.
+      operationId: getNewslettersByUser
+      responses:
+        '200':
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Newsletter'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+
+  /newsletter/{id}:
+    patch:
+      tags:
+        - newsletter
+      summary: Update a newsletter.
+      description: Update a newsletter.
+      operationId: updateNewsletter
+      parameters:
+        - name: id
+          in: path
+          description: The id of the newsletter that needs to be updated
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Update a newsletter.
+        content:
+          application/json:
+            schema:
+              properties:
+                category:
+                  type: string
+                name:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Newsletter'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+    get:
+      tags:
+        - newsletter
+      summary: Get newsletter by id.
+      description: This can only be done by the logged in user.
+      operationId: getNewslettersById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the newsletter that needs to be updated
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Newsletter'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+    delete:
+      tags:
+        - newsletter
+      summary: Delete a newsletter by id.
+      description: This can only be done by the logged in user.
+      operationId: deleteNewsletter
+      parameters:
+        - name: id
+          in: path
+          description: The id of the newsletter that needs to be deleted
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Newsletter deleted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+  /newsletter/{id}/source:
+    post:
+      tags:
+        - newsletter
+      summary: Add sources to a newsletter.
+      description: Add sources to a newsletter.
+      operationId: addSourceNewsletter
+      parameters:
+        - name: id
+          in: path
+          description: The id of the newsletter that needs to be updated
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Add sources to a newsletter.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sources:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+              required:
+                - sourceId
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Newsletter'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+    delete:
+      tags:
+        - newsletter
+      summary: Delete sources from a newsletter.
+      description: Delete sources from a newsletter.
+      operationId: deleteSourceNewsletter
+      parameters:
+        - name: id
+          in: path
+          description: The id of the newsletter that needs to be updated
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Delete sources from a newsletter.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sources:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+              required:
+                - sourceId
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Newsletter'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
 components:
   schemas:
     AuthUser:
@@ -515,7 +849,7 @@ components:
           format: password
       required:
         - email
-        - passwor
+        - password
 
     AuthRegister:
       type: object
@@ -577,6 +911,48 @@ components:
             updatedAt:
               type: string
               format: date-time
+
+    BaseNewsletter:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        sources:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: id of the sources to be included in the newsletter
+
+    NewNewsletter:
+      allOf:
+        - $ref: '#/components/schemas/BaseNewsletter'
+        - type: object
+      required:
+        - name
+        - category
+        - sources
+
+    Newsletter:
+      allOf:
+        - $ref: '#/components/schemas/BaseNewsletter'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            userId:
+              type: string
+              format: uuid
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
     BaseResponse:
       type: object
       properties:

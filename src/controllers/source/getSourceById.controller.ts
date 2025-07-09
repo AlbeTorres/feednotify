@@ -26,7 +26,9 @@ export async function getSourceById(req: Request, res: Response) {
     const response = await getSourceByIdService({ id, userId });
 
     if (response) {
-      res.status(200).json(response);
+      res
+        .status(200)
+        .json({ success: true, message: response.msg, data: response.source });
     } else {
       throw new createError.NotFound('Source not found');
     }

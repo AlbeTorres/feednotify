@@ -28,7 +28,11 @@ export async function createBulkSource(req: Request, res: Response) {
     if (response.success) {
       res
         .status(201)
-        .json({ message: response.msg, source: response.newSources });
+        .json({
+          success: true,
+          message: response.msg,
+          data: response.newSources,
+        });
     } else {
       throw new createError.InternalServerError('Error creating sources');
     }

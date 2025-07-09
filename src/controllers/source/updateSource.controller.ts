@@ -34,7 +34,11 @@ export async function updateSource(req: Request, res: Response) {
       userId,
     });
 
-    res.status(200).json(updatedSource);
+    res.status(200).json({
+      success: true,
+      msg: updatedSource.msg,
+      data: updatedSource.updatedSource,
+    });
   } catch (err: unknown) {
     if (err instanceof createError.HttpError) {
       throw err;

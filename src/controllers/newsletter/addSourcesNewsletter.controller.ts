@@ -32,8 +32,9 @@ export async function addSourceNewsletter(req: Request, res: Response) {
 
     if (response.success) {
       res.status(200).json({
+        success: true,
         message: response.msg,
-        newsletter: response.updatedNewsletter,
+        data: response.updatedNewsletter,
       });
     } else {
       throw new createError.InternalServerError('Error updating newsletter');

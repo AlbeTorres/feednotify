@@ -20,7 +20,9 @@ export async function getNewsletterByUser(req: Request, res: Response) {
   try {
     const response = await getNewsletterByUserService({ userId });
 
-    res.status(200).json(response);
+    res
+      .status(200)
+      .json({ success: true, msg: response.msg, data: response.newsletters });
   } catch (err: unknown) {
     if (err instanceof createError.HttpError) {
       throw err;

@@ -25,7 +25,7 @@ export async function deleteSource(req: Request, res: Response) {
     const response = await deleteSourceService({ id, userId });
 
     if (response.success) {
-      res.status(200).json({ message: response.msg });
+      res.status(200).json({ success: true, message: response.msg });
     } else {
       throw new createError.InternalServerError('Error deleting source');
     }
