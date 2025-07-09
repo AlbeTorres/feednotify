@@ -6,7 +6,6 @@ import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/jwt.config';
 import { sendTwoFactorTokenMail } from '../../email/senders/sendTwoFactorTokenMail';
 import { sendVerificationMail } from '../../email/senders/sendVerificationMail';
 
-
 import { getUserByEmailRepository } from '../../repository/auth/getUserByEmail.repository';
 import { deleteTwoFactorConfirmationTokenRepository } from '../../repository/token/deleteTwoFactorConfirmation.repository';
 import { generateTwoFactorConfirmation } from '../../repository/token/generateTwoFactorConfirmation.repository';
@@ -23,7 +22,7 @@ export async function loginService({
   code,
 }: LoginSchemaType): Promise<{
   token: string;
-  user: JwtPayload;
+  data: JwtPayload;
   success: boolean;
   state?: string;
   msg?: string;
@@ -46,7 +45,7 @@ export async function loginService({
       );
       return {
         token: '',
-        user: {
+        data: {
           id: '',
           email: '',
           role: '',
@@ -92,7 +91,7 @@ export async function loginService({
 
         return {
           token: '',
-          user: {
+          data: {
             id: '',
             email: '',
             role: '',
@@ -125,7 +124,7 @@ export async function loginService({
 
     return {
       token,
-      user: payload,
+      data: payload,
       success: true,
       state: 'success',
       msg: 'Login successful!',

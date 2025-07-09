@@ -11,27 +11,24 @@ export async function resetPassword(req: Request, res: Response) {
     const validatedFields = ResetPasswordSchema.safeParse({ token, password });
 
     if (!validatedFields.success) {
-      throw new createError.BadRequest('Datos de entrada inválidos'); // Error genérico por seguridad
+      throw new createError.BadRequest('Invalid input data');
     }
 
     const response = await resetPasswordService({ token, password });
 
     if (response.success) {
-      res.status(200).json({ message: 'Contraseña restablecida con éxito' });
+      res
+        .status(200)
+        .json({ success: true, message: 'Password reset successfully' });
     } else {
-      throw new createError.InternalServerError(
-        'Error al restablecer la contraseña'
-      );
+      throw new createError.InternalServerError('Failed to reset password.');
     }
   } catch (err: unknown) {
-    // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {
-      // Ya viene con status y mensaje adecuados
       throw err;
     }
     if (err instanceof z.ZodError) {
-      // Nunca debería llegar aquí porque lo validamos antes, pero…
-      throw new createError.BadRequest('Error de validación interno');
+      throw new createError.BadRequest('Internal validation error');
     }
   }
 }

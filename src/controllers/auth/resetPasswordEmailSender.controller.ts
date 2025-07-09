@@ -11,27 +11,26 @@ export async function resetPasswordEmailSender(req: Request, res: Response) {
     const validatedFields = ResetPasswordEmailSenderSchema.safeParse({ email });
 
     if (!validatedFields.success) {
-      throw new createError.BadRequest('Datos de entrada inválidos'); // Error genérico por seguridad
+      throw new createError.BadRequest('Invalid input data');
     }
 
     const response = await resetPasswordEmailSenderService({ email });
 
     if (response.success) {
-      res.status(200).json({ message: 'Email de restablecimiento enviado' });
+      res
+        .status(200)
+        .json({ success: true, message: 'Reset password email sent' });
     } else {
       throw new createError.InternalServerError(
-        'Error al enviar el email de restablecimiento'
+        'Error sending reset password email'
       );
     }
   } catch (err: unknown) {
-    // —— Errores conocidos ——
     if (err instanceof createError.HttpError) {
-      // Ya viene con status y mensaje adecuados
       throw err;
     }
     if (err instanceof z.ZodError) {
-      // Nunca debería llegar aquí porque lo validamos antes, pero…
-      throw new createError.BadRequest('Error de validación interno');
+      throw new createError.BadRequest('Internal validation error');
     }
   }
 }

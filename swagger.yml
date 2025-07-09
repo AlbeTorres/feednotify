@@ -68,6 +68,205 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Allows a user to login into the API.
+      description: Login a user.
+      operationId: login
+      requestBody:
+        description: Login a user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthLogin'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  token:
+                    type: string
+                    format: jwt
+                  data:
+                    $ref: '#/components/schemas/AuthUser'
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AuthUser'
+        '202':
+          description: Unverificated email or two-factor authentication token send
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  state:
+                    type: string
+                    enum: [unverificated_email, two_factor_token_send]
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AuthUser'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/email-verification:
+    post:
+      tags:
+        - auth
+      summary: Verifies whether a user's email is authentic
+      description: Verifies a user email.
+      operationId: Verifies a user email.
+      requestBody:
+        description: Verifies a user email.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The token sent to the user's email for verification
+              required:
+                - token
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/reset-password-email-sender:
+    post:
+      tags:
+        - auth
+      summary: Sends a reset password email to the user.
+      description: Sends a reset password email to the user.
+      operationId: Sends a reset password email to the user.
+      requestBody:
+        description: Sends a reset password email to the user.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email to send the reset password email
+                  format: email
+              required:
+                - email
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/reset-password:
+    post:
+      tags:
+        - auth
+      summary: Resets the user's password.
+      description: Resets the user's password.
+      operationId: Resets the user's password.
+      requestBody:
+        description: Resets the user's password.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The token sent to the user's email for verification
+                password:
+                  type: string
+                  description: The new password for the user
+                  format: password
+              required:
+                - token
+                - password
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /source:
     post:
@@ -279,6 +478,7 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - jwtAuth: []
+
 components:
   schemas:
     AuthUser:
@@ -294,6 +494,10 @@ components:
         name:
           type: string
           nullable: true
+        role:
+          type: string
+          enum: [user, admin]
+          description: Role of the user, can be either 'user' or 'admin'
       required:
         - id
 
