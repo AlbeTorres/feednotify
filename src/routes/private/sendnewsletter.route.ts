@@ -1,6 +1,6 @@
 import express from 'express';
 import { sendAINewsletter } from '../../controllers/newsletterDelivery/aiNewsletter.controller';
-import { cancelarScheduledNewsletter } from '../../controllers/newsletterDelivery/cancelScheduleNewsletter.controller';
+import { cancelAllScheduledNewsletter } from '../../controllers/newsletterDelivery/cancelScheduleNewsletter.controller';
 import { sendNewsletter } from '../../controllers/newsletterDelivery/newsletter.controller';
 import { weeklyScheduleNewsletter } from '../../controllers/newsletterDelivery/weeklyScheduleNewsletter.controller';
 import { methodNotAllowed } from '../../util/methodHandler';
@@ -19,7 +19,7 @@ router
 
 router
   .route('/schedulecancel')
-  .post(cancelarScheduledNewsletter)
+  .post(cancelAllScheduledNewsletter)
   .all(methodNotAllowed(['POST']));
 
 router

@@ -55,7 +55,11 @@ export async function weeklyScheduleNewsletter(req: Request, res: Response) {
       message: `Newsletter configured: weekly on ${weekday}s`,
     };
 
-    res.json(response);
+    res.json({
+      success: true,
+      message: 'Newsletter scheduled successfully',
+      data: { scheduledNewsletterId: response.recurringJobId },
+    });
   } catch (err: unknown) {
     if (err instanceof createError.HttpError) {
       throw err;

@@ -29,7 +29,16 @@ export async function sendAINewsletter(req: Request, res: Response) {
   try {
     const response = await sendAiNewsletterService(userId, lastWeek, id);
 
-    res.status(200).json(response);
+    res.status(200).json({
+      success: true,
+      message: 'AI Newsletter sent successfully',
+      data: {
+        content: response.content,
+        email: response.email,
+        rssfeed: response.rssFeed,
+        youtubefeed: response.youtubeFeed,
+      },
+    });
   } catch (err: unknown) {
     if (err instanceof createError.HttpError) {
       throw err;

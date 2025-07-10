@@ -28,7 +28,16 @@ export async function sendNewsletter(req: Request, res: Response) {
   try {
     const response = await sendNewsletterService(userId, id, lastWeek);
 
-    res.status(200).json(response);
+    res.status(200).json({
+      success: true,
+      message: 'Newsletter sent successfully',
+      data: {
+        content: '',
+        email: response.email,
+        rssfeed: response.rssFeed,
+        youtubefeed: response.youtubeFeed,
+      },
+    });
   } catch (err: unknown) {
     if (err instanceof createError.HttpError) {
       throw err;

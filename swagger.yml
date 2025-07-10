@@ -15,8 +15,8 @@ servers:
 tags:
   - name: auth
     description: Authentication
-  - name: user
-    description: User management
+  # - name: user
+  #   description: User management
   - name: source
     description: Operations related to sources
   - name: newsletter
@@ -813,8 +813,275 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - jwtAuth: []
+
+  /sendNewsletter:
+    get:
+      tags:
+        - sendNewsletter
+      summary: Send a newsletter to the user.
+      description: Send a newsletter to the user.
+      operationId: sendNewsletter
+      requestBody:
+        description: Send a newsletter to the user.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+              required:
+                - id
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      content:
+                        type: string
+                        description: The content of the newsletter
+                      email:
+                        type: string
+                        format: email
+                        description: The email of the user
+                      rssFeed:
+                        $ref: '#/components/schemas/RssFeed'
+                      youtubeFeed:
+                        $ref: '#/components/schemas/YoutubeFeed'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+  /sendNewsletter/weeklyScheduleNewsletter:
+    post:
+      tags:
+        - sendNewsletter
+      summary: Schedule a newsletter to be send.
+      description: Schedule a newsletter to be send.
+      operationId: weeklyScheduleNewsletter
+      requestBody:
+        description: Schedule a newsletter to be send.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                weekday:
+                  type: string
+                  enum:
+                    [
+                      Monday,
+                      Tuesday,
+                      Wednesday,
+                      Thursday,
+                      Friday,
+                      Saturday,
+                      Sunday,
+                    ]
+                  description: The day of the week to send the newsletter
+                hour:
+                  type: integer
+                  format: int32
+                  description: The hour of the day to send the newsletter (0-23)
+                minute:
+                  type: integer
+                  format: int32
+                  description: The minute of the hour to send the newsletter (0-59)
+              required:
+                - id
+                - weekday
+                - hour
+                - minute
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      scheduledNewsletterId:
+                        type: string
+                        description: The id of the job tha represent the scheduled newsletter
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+  /sendNewsletter/cancelAllScheduleNewsletter:
+    post:
+      tags:
+        - sendNewsletter
+      summary: Cancel all the Schedule newsletters to be send for some user.
+      description: Cancel all the Schedule newsletters to be send for some user.
+      operationId: cancelAllScheduleNewsletter
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
+  /sendNewsletter/ai:
+    get:
+      tags:
+        - sendNewsletter
+      summary: Send a ai generated newsletter to the user.
+      description: Send a ai generated newsletter to the user.
+      operationId: sendAiNewsletter
+      requestBody:
+        description: Send a ai generated newsletter to the user.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+              required:
+                - id
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                    type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      content:
+                        type: string
+                        description: The content of the AI generated newsletter
+                      email:
+                        type: string
+                        format: email
+                        description: The email of the user
+                      rssFeed:
+                        $ref: '#/components/schemas/RssFeed'
+                      youtubeFeed:
+                        $ref: '#/components/schemas/YoutubeFeed'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - jwtAuth: []
 components:
   schemas:
+    RssFeed:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        name:
+          type: string
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+
+    YoutubeFeed:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        name:
+          type: string
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/YoutubeVideo'
+    Post:
+      type: object
+      properties:
+        title:
+          type: string
+        link:
+          type: string
+          format: uri
+        pudDate:
+          type: string
+          format: date-time
+        content:
+          type: string
+          description: Content of the post, can be HTML or plain text
+
+    YoutubeVideo:
+      type: object
+      properties:
+        title:
+          type: string
+        link:
+          type: string
+          format: uri
+        publishedAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+        channelId:
+          type: string
+          description: Unique identifier for the YouTube channel
+        channelTitle:
+          type: string
+          description: Title of the YouTube channel
+        thumbnail:
+          type: string
+          format: uri
+          description: URL of the video thumbnail
+
     AuthUser:
       type: object
       properties:

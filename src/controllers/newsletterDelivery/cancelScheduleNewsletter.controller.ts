@@ -3,7 +3,10 @@ import createError from 'http-errors';
 import * as z from 'zod';
 import { cancelUserNewsletter } from '../../services/newsletterDelivery/cancelScheduledNewsletterByUser.service';
 
-export async function cancelarScheduledNewsletter(req: Request, res: Response) {
+export async function cancelAllScheduledNewsletter(
+  req: Request,
+  res: Response
+) {
   const userId = req.user?.id;
 
   if (!userId) {
@@ -13,7 +16,10 @@ export async function cancelarScheduledNewsletter(req: Request, res: Response) {
   try {
     await cancelUserNewsletter(userId);
 
-    res.json('Newsletter cancellation scheduled successfully');
+    res.json({
+      success: true,
+      message: 'Newsletter cancellation scheduled successfully',
+    });
   } catch (err: unknown) {
     if (err instanceof createError.HttpError) {
       throw err;
