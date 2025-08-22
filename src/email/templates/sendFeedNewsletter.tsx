@@ -18,6 +18,12 @@ export const sendNewsLetterMail = async (
     to: email,
     subject: 'Reset password',
     html: `<!DOCTYPE html>${html}>`,
+     attachments: [ {
+            filename: 'newsletter.pdf',
+            content: Buffer.from(html, 'base64'),
+            contentType: 'application/pdf',
+          },] 
+         
   };
 
   transporter.sendMail(mailOptions, (error) => {

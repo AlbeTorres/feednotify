@@ -6,6 +6,8 @@ import { getUserByIdRepository } from '../../repository/auth/getUserbyId.reposit
 import { getNewsletterByIdRepository } from '../../repository/newsletter/getNewsletterById.repository';
 import { sendNewsLetterAIMail } from '../../email/senders/sendNewsLetterAiMail';
 import { Prisma } from '@prisma/client';
+import { feedsToPdfBuffer, savePdfToDisk } from '../pdf/createPdfByJson';
+import { createFeedsPDF } from '../pdf/createPdfbyJson2';
 
 export async function sendAiNewsletterService(
   userId: string,
@@ -42,7 +44,15 @@ export async function sendAiNewsletterService(
       youtubeFeed,
     });
 
-    await sendNewsLetterAIMail(user.email, newletterContent, user.name);
+    const data = await feedsToPdfBuffer({
+      rss: rssFeed,
+      youtube: youtubeFeed,
+    });
+
+    await savePdfToDisk(data);
+    await createFeedsPDF({ rss: rssFeed, youtube: youtubeFeed });
+
+    // await sendNewsLetterAIMail(user.email, newletterContent, user.name, data);
 
     return {
       success: true,
